@@ -1,14 +1,11 @@
 import { FBZ_DATA } from "./data.js";
 
 document.addEventListener("DOMContentLoaded", () => {
-  // Inicializa GSAP se disponível
   if (window.gsap && window.ScrollTrigger) {
     gsap.registerPlugin(ScrollTrigger);
   }
 
   const vitrineContainer = document.getElementById("vitrine");
-
-  // Cria container para o Background Fixo
   let bgContainer = document.getElementById("bg-container");
   if (!bgContainer) {
     bgContainer = document.createElement("div");
@@ -16,253 +13,160 @@ document.addEventListener("DOMContentLoaded", () => {
     document.body.prepend(bgContainer);
   }
 
-  // Helpers -------------------------------------------------
+  // Helpers
+  function getGallery(emp) {
+    const arr = emp.gallery || emp.imagens || emp.images || emp.galeria || null;
+    if (Array.isArray(arr) && arr.length) return arr;
+    // Fallback: repete a heroImg para ter o que mostrar
+    return [emp.heroImg, emp.heroImg, emp.heroImg];
+  }
 
-  // Se você não tiver logo no data.js ainda, ele tenta um padrão (opcional)
+  // Tenta achar a logo (você pode ajustar os caminhos conforme sua pasta)
   function guessLogoPath(emp) {
-    // Você pode trocar esse padrão se quiser
-    // Ex.: "/assets/img/logo/LOGO-CIDADE-INTELIGENTE.webp"
-    // Aqui ele tenta slug em minúsculo (se existir arquivo, ok; se não, só falha silencioso)
-    const base = `/assets/img/logo/${(emp.slug || "").toUpperCase()}`;
     return [
-      emp.logo, // se existir, prioridade total
+      emp.logo,
       `/assets/img/logo/LOGO-${(emp.nome || "").toUpperCase().replace(/\s+/g, "-")}.webp`,
       `/assets/img/logo/${(emp.slug || "").toLowerCase()}.webp`,
-      `/assets/img/logo/${(emp.slug || "").toLowerCase()}.png`,
+      `/assets/img/logo/${(emp.slug || "").toLowerCase()}.png`
     ].filter(Boolean);
   }
 
-  // Galeria: aceita emp.gallery ou emp.imagens; se não tiver, cria fallback sem quebrar layout
-  function getGallery(emp) {
-    const arr =
-      emp.gallery ||
-      emp.imagens ||
-      emp.images ||
-      emp.galeria ||
-      null;
-
-    if (Array.isArray(arr) && arr.length) return arr;
-
-    // Fallback mínimo (não quebra)
-    // Ideal: depois você preenche emp.gallery com 3-6 imagens reais
-    return [emp.heroImg, emp.heroImg, emp.heroImg].filter(Boolean);
-  }
-
-  // Troca de imagem da galeria (fade)
+  // Função de troca de imagem
   function switchGalleryImage(sectionEl, index) {
     const imgs = Array.from(sectionEl.querySelectorAll(".project-gallery-img"));
     if (!imgs.length) return;
 
-    const safeIndex = Math.max(0, Math.min(index, imgs.length - 1));
+    // Lógica Circular (se passar do fim, volta pro começo)
+    let safeIndex = index;
+    if (index < 0) safeIndex = imgs.length - 1;
+    if (index >= imgs.length) safeIndex = 0;
 
-    // Atualiza estado ativo no nav
-    const btns = Array.from(sectionEl.querySelectorAll(".mini-nav button[data-img-index]"));
-    btns.forEach((b) => b.classList.remove("is-active"));
-    const activeBtn = btns.find((b) => Number(b.dataset.imgIndex) === safeIndex);
-    if (activeBtn) activeBtn.classList.add("is-active");
+    // Atualiza Dots
+    const btns = Array.from(sectionEl.querySelectorAll(".mini-nav__btn"));
+    btns.forEach(b => b.classList.remove("is-active"));
+    if (btns[safeIndex]) btns[safeIndex].classList.add("is-active");
 
-    // Se GSAP existir, faz fade suave; se não, troca seco
-    const hasGsap = !!window.gsap;
+    // Troca Imagem (Crossfade)
     imgs.forEach((img, i) => {
       const show = i === safeIndex;
-
-      if (hasGsap) {
-        window.gsap.to(img, {
-          autoAlpha: show ? 1 : 0,
-          duration: show ? 0.35 : 0.25,
-          ease: "power2.out",
-          overwrite: "auto",
-        });
+      if (window.gsap) {
+        window.gsap.to(img, { autoAlpha: show ? 1 : 0, duration: 0.4 });
       } else {
-        img.style.opacity = show ? "1" : "0";
-        img.style.visibility = show ? "visible" : "hidden";
+        img.style.opacity = show ? 1 : 0;
       }
     });
+
+    // Salva o índice atual no elemento pai para referência das setas
+    sectionEl.dataset.currentIndex = safeIndex;
   }
 
-  // HOME (Vitrine) ------------------------------------------
+  // --- RENDERIZAR VITRINE ---
   if (vitrineContainer) {
     vitrineContainer.innerHTML = "";
     bgContainer.innerHTML = "";
 
     FBZ_DATA.empreendimentos.forEach((emp, index) => {
-      // 1) BACKGROUND SYSTEM (Imagem + Overlay)
+      // 1. Background
       const bgDiv = document.createElement("div");
       bgDiv.className = `bg-item bg-item-${index}`;
-
-      const imgLayer = document.createElement("div");
-      imgLayer.className = "bg-img-layer";
-      imgLayer.style.backgroundImage = `url('${emp.heroImg}')`;
-      bgDiv.appendChild(imgLayer);
-
-      const overlay = document.createElement("div");
-      overlay.className = "bg-overlay";
-      bgDiv.appendChild(overlay);
-
+      bgDiv.innerHTML = `<div class="bg-img-layer" style="background-image: url('${emp.heroImg}')"></div><div class="bg-overlay"></div>`;
       bgContainer.appendChild(bgDiv);
 
-      // 2) CONTEÚDO
-      const reverseClass = index % 2 !== 0 ? "reverse" : "";
-
+      // 2. Conteúdo
       const gallery = getGallery(emp);
       const logoCandidates = guessLogoPath(emp);
+      const reverseClass = index % 2 !== 0 ? "reverse" : "";
 
-      // Mini navbar (dots)
-      const navItemsHTML = gallery
-        .map((_, i) => {
-          return `
-            <button type="button" class="mini-nav__btn ${i === 0 ? "is-active" : ""}" data-img-index="${i}" aria-label="Imagem ${i + 1}">
-              <span class="mini-nav__dot"></span>
-            </button>
-          `;
-        })
-        .join("");
+      // Gera os Dots
+      const dotsHTML = gallery.map((_, i) => `
+        <button type="button" class="mini-nav__btn ${i === 0 ? "is-active" : ""}" data-img-index="${i}">
+          <span class="mini-nav__dot"></span>
+        </button>
+      `).join("");
 
-      // Galeria de imagens empilhadas
-      const galleryImgsHTML = gallery
-        .map((src, i) => {
-          return `
-            <img
-              class="project-gallery-img"
-              src="${src}"
-              alt="${emp.nome} - imagem ${i + 1}"
-              loading="lazy"
-              style="opacity:${i === 0 ? 1 : 0}; visibility:${i === 0 ? "visible" : "hidden"};"
-            />
-          `;
-        })
-        .join("");
+      // Gera as Imagens
+      const galleryHTML = gallery.map((src, i) => `
+        <img class="project-gallery-img" src="${src}" style="opacity:${i === 0 ? 1 : 0}" loading="lazy">
+      `).join("");
 
-      // Seção completa
+      // SVG Icons para as setas
+      const chevronLeft = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>`;
+      const chevronRight = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>`;
+
       const sectionHTML = `
-        <section class="project-section" data-index="${index}">
-          <div class="container project-container">
-
-            <!-- Mini navbar (controla imagens do card) -->
-            <div class="mini-nav" aria-label="Controle de imagens do empreendimento">
-              <div class="mini-nav__inner">
-                <span class="mini-nav__label">${emp.nome}</span>
-                <div class="mini-nav__controls">
-                  ${navItemsHTML}
-                </div>
-              </div>
-            </div>
-
-            <div class="project-content ${reverseClass}">
+        <section class="project-section" data-index="${index}" data-current-index="0">
+          <div class="container project-container" style="position: relative;"> <div class="project-content ${reverseClass}">
+              
               <div class="perspective-container group">
-                <a href="${emp.link}" class="project-card-link" aria-label="Abrir ${emp.nome}">
-                  
-                  <!-- Camada LOGO (aparece primeiro) -->
+                <a href="${emp.link}" class="project-card-link">
                   <div class="project-card-media project-card-media--logo">
-                    <img
-                      class="project-logo"
-                      alt="Logo ${emp.nome}"
-                      data-logo-candidates='${JSON.stringify(logoCandidates)}'
-                    />
+                    <img class="project-logo" data-logo-candidates='${JSON.stringify(logoCandidates)}' />
                   </div>
-
-                  <!-- Camada GALERIA (entra depois da logo) -->
                   <div class="project-card-media project-card-media--gallery">
-                    <div class="project-gallery-stack">
-                      ${galleryImgsHTML}
-                    </div>
+                     ${galleryHTML}
                   </div>
-
                   <div class="card-badge">${emp.status}</div>
                 </a>
               </div>
 
               <div class="text-content">
                 <h2 class="project-title split-animate">${emp.nome}</h2>
-
-                <span class="project-slogan" style="color: ${emp.corHex}">
-                  ${emp.slogan}
-                </span>
-
+                <span class="project-slogan" style="color:${emp.corHex}">${emp.slogan}</span>
                 <p class="project-desc">${emp.descCurta}</p>
-
                 <div class="project-actions">
-                  <a
-                    href="${emp.link}"
-                    class="btn btn--primary"
-                    style="background-color:${emp.corHex}; border-color:${emp.corHex}; color:#fff;"
-                  >
-                    Explorar Detalhes
-                  </a>
-
-                  <a
-                    href="https://wa.me/${FBZ_DATA.global.whatsapp}"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="btn btn--ghost"
-                  >
-                    Falar no WhatsApp
-                  </a>
+                  <a href="${emp.link}" class="btn btn--primary" style="background:${emp.corHex}; border-color:${emp.corHex}; color:#fff;">Explorar</a>
+                  <a href="https://wa.me/${FBZ_DATA.global.whatsapp}" class="btn btn--ghost">WhatsApp</a>
                 </div>
+              </div>
+
+            </div>
+
+            <div class="mini-nav">
+              <div class="mini-nav__inner">
+                <button class="nav-arrow prev">${chevronLeft}</button>
+                <div class="mini-nav__dots">
+                  ${dotsHTML}
+                </div>
+                <button class="nav-arrow next">${chevronRight}</button>
               </div>
             </div>
 
           </div>
         </section>
       `;
-
       vitrineContainer.insertAdjacentHTML("beforeend", sectionHTML);
     });
 
-    // 3) Inicializa LOGO fallback (tenta múltiplos caminhos)
-    const logoImgs = document.querySelectorAll("img.project-logo[data-logo-candidates]");
-    logoImgs.forEach((img) => {
-      let candidates = [];
-      try {
-        candidates = JSON.parse(img.getAttribute("data-logo-candidates") || "[]");
-      } catch {
-        candidates = [];
-      }
-
-      if (!Array.isArray(candidates) || candidates.length === 0) {
-        // Sem candidates -> some com a imagem (não quebra)
-        img.style.display = "none";
-        return;
-      }
-
+    // 3. Inicializa Logos (Fallback)
+    document.querySelectorAll("img.project-logo").forEach(img => {
+      const candidates = JSON.parse(img.dataset.logoCandidates || "[]");
       let i = 0;
       const tryNext = () => {
-        if (i >= candidates.length) {
-          img.style.display = "none";
-          return;
-        }
-        img.src = candidates[i];
-        i += 1;
+        if(i >= candidates.length) { img.style.display="none"; return; }
+        img.src = candidates[i++];
       };
-
-      img.addEventListener("error", () => tryNext());
+      img.onerror = tryNext;
       tryNext();
     });
 
-    // 4) Liga controles da mini navbar (troca imagens)
-    const sections = Array.from(document.querySelectorAll(".project-section"));
-    sections.forEach((sectionEl) => {
-      const btns = Array.from(sectionEl.querySelectorAll(".mini-nav button[data-img-index]"));
-      if (!btns.length) return;
-
-      btns.forEach((btn) => {
-        btn.addEventListener("click", (e) => {
-          e.preventDefault();
-          const idx = Number(btn.dataset.imgIndex || 0);
-          switchGalleryImage(sectionEl, idx);
-        });
+    // 4. Lógica de Clique (Setas e Dots)
+    document.querySelectorAll(".project-section").forEach(section => {
+      // Dots
+      section.querySelectorAll(".mini-nav__btn").forEach(btn => {
+        btn.addEventListener("click", () => switchGalleryImage(section, Number(btn.dataset.imgIndex)));
+      });
+      // Setas
+      section.querySelector(".prev").addEventListener("click", () => {
+        const curr = Number(section.dataset.currentIndex || 0);
+        switchGalleryImage(section, curr - 1);
+      });
+      section.querySelector(".next").addEventListener("click", () => {
+        const curr = Number(section.dataset.currentIndex || 0);
+        switchGalleryImage(section, curr + 1);
       });
     });
 
-    // 5) Inicia animações (GSAP)
-    import("./animation.js").then((module) => {
-      if (module.initHomeAnimations) module.initHomeAnimations();
-    });
-  }
-
-  // Lógica para páginas internas
-  const pageSlug = document.body.getAttribute("data-empreendimento");
-  if (pageSlug) {
-    import("./render-empreendimento.js");
+    // 5. Inicia Animações
+    import("./animation.js").then(m => m.initHomeAnimations && m.initHomeAnimations());
   }
 });

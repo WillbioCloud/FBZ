@@ -20,45 +20,6 @@ export const FBZ_DATA = {
     },
 
     {
-      slug: "caminho-do-lago",
-      ano: 2025,
-      nome: "Caminho do Lago",
-      status: "Lançamento",
-      slogan: "Seu novo horizonte.",
-      descCurta: "Novo loteamento com conceito moderno.",
-      heroImg: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80",
-      logo: "/assets/img/logo/LOGO-CAMINHO-DO-LAGO.webp",
-      corHex: "#0ea5e9",
-      link: "#",
-    },
-
-    {
-      slug: "flamboyant",
-      ano: 2025,
-      nome: "Flamboyant",
-      status: "Pré-Lançamento",
-      slogan: "Exclusividade e conforto.",
-      descCurta: "Projeto premium em localização estratégica.",
-      heroImg: "https://images.unsplash.com/photo-1494526585095-c41746248156?q=80",
-      logo: "/assets/img/logo/LOGO-FLAMBOYANT.webp",
-      corHex: "#7e22ce",
-      link: "#",
-    },
-
-    {
-      slug: "morada-nobre",
-      ano: 2025,
-      nome: "Morada Nobre",
-      status: "Pré-Lançamento",
-      slogan: "Viva com nobreza.",
-      descCurta: "Residencial planejado com alto padrão.",
-      heroImg: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80",
-      logo: "/assets/img/logo/LOGO-MORADA-NOBRE.webp",
-      corHex: "#a16207",
-      link: "#",
-    },
-
-    {
       slug: "cidade-inteligente",
       ano: 2024,
       nome: "Cidade Inteligente",
@@ -77,6 +38,19 @@ export const FBZ_DATA = {
     },
 
     {
+        slug: "singapura-shopping",
+        ano: 2025,
+        nome: "Singapura Shopping",
+        status: "Lançamento",
+        slogan: "Compre e viva com estilo.",
+        descCurta: "Shopping com infraestrutura moderna e variedade de lojas.",
+        heroImg: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80",
+        logo: "/assets/img/logo/LOGO-SINGAPURA-SHOPPING.webp",
+        corHex: "#f59e0b",
+        link: "/src/empreendimentos/singapura-shopping.html",
+    },
+
+    {
       slug: "cidade-universitaria",
       ano: 2023,
       nome: "Cidade Universitária",
@@ -87,19 +61,6 @@ export const FBZ_DATA = {
       logo: "/assets/img/logo/LOGO-CIDADE-UNIVERSITARIA.webp",
       corHex: "#4338ca",
       link: "/src/empreendimentos/cidade-universitaria.html",
-    },
-
-    {
-      slug: "cidade-verde",
-      ano: 2022,
-      nome: "Cidade Verde",
-      status: "Disponível",
-      slogan: "Vida ao ar livre com estrutura.",
-      descCurta: "Projeto com foco em áreas verdes e organização urbana.",
-      heroImg: "https://images.unsplash.com/photo-1628744448839-4458d5789f2a?q=80",
-      logo: "/assets/img/logo/LOGO-CIDADE-VERDE.webp",
-      corHex: "#15803d",
-      link: "/src/empreendimentos/cidade-verde.html",
     },
 
     {
@@ -116,8 +77,34 @@ export const FBZ_DATA = {
     },
 
     {
+      slug: "cidade-verde",
+      ano: 2021,
+      nome: "Cidade Verde",
+      status: "Disponível",
+      slogan: "Vida ao ar livre com estrutura.",
+      descCurta: "Projeto com foco em áreas verdes e organização urbana.",
+      heroImg: "https://images.unsplash.com/photo-1628744448839-4458d5789f2a?q=80",
+      logo: "/assets/img/logo/LOGO-CIDADE-VERDE.webp",
+      corHex: "#15803d",
+      link: "/src/empreendimentos/cidade-verde.html",
+    },
+
+    {
+        slug: "residencial-primaver-2",
+        ano: 2020,
+        nome: "Residencial Primaver-2",
+        status: "Disponível",
+        slogan: "Vida em harmonia com a natureza.",
+        descCurta: "Loteamento com áreas verdes e infraestrutura moderna.",
+        heroImg: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80",
+        logo: "/assets/img/logo/LOGO-RESIDENCIAL-PRIMAVER-2.webp",
+        corHex: "#16a34a",
+        link: "/src/empreendimentos/residencial-primaver-2.html",
+    },
+
+    {
       slug: "setor-lago-sul",
-      ano: 2020,
+      ano: 2016,
       nome: "Setor Lago Sul",
       status: "Entregue",
       slogan: "Viva perto do lago.",
@@ -126,6 +113,45 @@ export const FBZ_DATA = {
       logo: "/assets/img/logo/LOGO-LAGO-SUL.webp",
       corHex: "#0369a1",
       link: "/src/empreendimentos/setor-lago-sul.html",
+    },
+
+    {
+      slug: "flamboyant",
+      ano: 2016,
+      nome: "Flamboyant",
+      status: "Pré-Lançamento",
+      slogan: "Exclusividade e conforto.",
+      descCurta: "Projeto premium em localização estratégica.",
+      heroImg: "https://images.unsplash.com/photo-1494526585095-c41746248156?q=80",
+      logo: "/assets/img/logo/LOGO-FLAMBOYANT.webp",
+      corHex: "#ce6722",
+      link: "#",
+    },
+
+    {
+      slug: "caminho-do-lago",
+      ano: 2015,
+      nome: "Caminho do Lago",
+      status: "Lançamento",
+      slogan: "Seu novo horizonte.",
+      descCurta: "Novo loteamento com conceito moderno.",
+      heroImg: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80",
+      logo: "/assets/img/logo/LOGO-CAMINHO-DO-LAGO.webp",
+      corHex: "#1583b6",
+      link: "#",
+    },
+
+    {
+      slug: "morada-nobre",
+      ano: 2014,
+      nome: "Morada Nobre",
+      status: "Pré-Lançamento",
+      slogan: "Viva com nobreza.",
+      descCurta: "Residencial planejado com alto padrão.",
+      heroImg: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80",
+      logo: "/assets/img/logo/LOGO-MORADA-NOBRE.webp",
+      corHex: "#18a1b9",
+      link: "#",
     },
   ],
 };
