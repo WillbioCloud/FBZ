@@ -1,28 +1,25 @@
-// src/js/app.js
 import { FBZ_DATA } from "./data.js";
-import { initAuth } from "./auth.js"; // Importa o Auth que criamos
+// import { initAuth } from "./auth.js"; // Removido pois tiramos o login da Home
 
 document.addEventListener("DOMContentLoaded", () => {
-  // 1. Inicia Auth (Login Google)
-  initAuth();
-
-  // 2. Inicializa GSAP
+  // Inicializa GSAP
   if (window.gsap && window.ScrollTrigger) {
-    gsap.registerPlugin(ScrollTrigger);
+    window.gsap.registerPlugin(window.ScrollTrigger);
   }
 
+  // Elementos
   const vitrineContainer = document.getElementById("vitrine");
-  const homeBlogContainer = document.getElementById("homeBlogGrid"); // Novo Container
-
-  // Cria container para o Background Fixo
+  const homeBlogContainer = document.getElementById("homeBlogGrid");
   let bgContainer = document.getElementById("bg-container");
+
+  // Cria BG Container se não existir
   if (!bgContainer) {
     bgContainer = document.createElement("div");
     bgContainer.id = "bg-container";
     document.body.prepend(bgContainer);
   }
 
-  // --- HELPERS (Galeria, Logo, Imagem) ---
+  // --- HELPERS ---
   function getGallery(emp) {
     const arr = emp.gallery || emp.imagens || emp.images || emp.galeria || null;
     if (Array.isArray(arr) && arr.length) return arr;
@@ -61,28 +58,25 @@ document.addEventListener("DOMContentLoaded", () => {
     sectionEl.dataset.currentIndex = safeIndex;
   }
 
-  // --- RENDERIZAR VITRINE (EMPREENDIMENTOS) ---
+  // --- RENDERIZAR VITRINE ---
   if (vitrineContainer) {
     vitrineContainer.innerHTML = "";
     bgContainer.innerHTML = "";
 
     FBZ_DATA.empreendimentos.forEach((emp, index) => {
-      // 1. Background
+      // 1. BG
       const bgDiv = document.createElement("div");
       bgDiv.className = `bg-item bg-item-${index}`;
       bgDiv.innerHTML = `<div class="bg-img-layer" style="background-image: url('${emp.heroImg}')"></div><div class="bg-overlay"></div>`;
       bgContainer.appendChild(bgDiv);
 
-      // 2. Conteúdo
+      // 2. Content
       const gallery = getGallery(emp);
       const logoCandidates = guessLogoPath(emp);
       const reverseClass = index % 2 !== 0 ? "reverse" : "";
 
-      // Dots e Imagens
       const dotsHTML = gallery.map((_, i) => `
-        <button type="button" class="mini-nav__btn ${i === 0 ? "is-active" : ""}" data-img-index="${i}">
-          <span class="mini-nav__dot"></span>
-        </button>
+        <button type="button" class="mini-nav__btn ${i === 0 ? "is-active" : ""}" data-img-index="${i}"><span class="mini-nav__dot"></span></button>
       `).join("");
 
       const galleryHTML = gallery.map((src, i) => `
@@ -95,20 +89,16 @@ document.addEventListener("DOMContentLoaded", () => {
       const sectionHTML = `
         <section class="project-section" data-index="${index}" data-current-index="0">
           <div class="container project-container" style="position: relative;">
-            
             <div class="project-content ${reverseClass}">
               <div class="perspective-container group">
                 <a href="${emp.link}" class="project-card-link">
                   <div class="project-card-media project-card-media--logo">
                     <img class="project-logo" data-logo-candidates='${JSON.stringify(logoCandidates)}' />
                   </div>
-                  <div class="project-card-media project-card-media--gallery">
-                     ${galleryHTML}
-                  </div>
+                  <div class="project-card-media project-card-media--gallery">${galleryHTML}</div>
                   <div class="card-badge">${emp.status}</div>
                 </a>
               </div>
-
               <div class="text-content">
                 <h2 class="project-title split-animate">${emp.nome}</h2>
                 <span class="project-slogan" style="color:${emp.corHex}">${emp.slogan}</span>
@@ -119,7 +109,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 </div>
               </div>
             </div>
-
             <div class="mini-nav">
               <div class="mini-nav__inner">
                 <button class="nav-arrow prev">${chevronLeft}</button>
@@ -127,14 +116,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 <button class="nav-arrow next">${chevronRight}</button>
               </div>
             </div>
-
           </div>
         </section>
       `;
       vitrineContainer.insertAdjacentHTML("beforeend", sectionHTML);
     });
 
-    // Inicializa Logos e Eventos
+    // Inits
     document.querySelectorAll("img.project-logo").forEach(img => {
       const candidates = JSON.parse(img.dataset.logoCandidates || "[]");
       let i = 0;
@@ -160,15 +148,14 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     });
 
-    // Inicia Animações (Scroll)
     import("./animation.js").then(m => m.initHomeAnimations && m.initHomeAnimations());
   }
 
-  // --- RENDERIZAR BLOG PREVIEW ---
+  // --- RENDERIZAR BLOG PREVIEW NA HOME ---
   if (homeBlogContainer && FBZ_DATA.blog) {
-    const latestPosts = FBZ_DATA.blog.slice(0, 4);
+    const latestPosts = FBZ_DATA.blog.slice(0, 3);
     
-    // Ícones SVG
+    // Ícones
     const iconEye = `<svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>`;
     const iconMsg = `<svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>`;
     const iconClock = `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>`;
@@ -185,9 +172,9 @@ document.addEventListener("DOMContentLoaded", () => {
           <p class="blog-excerpt" style="font-size: 0.9rem;">${post.resumo.substring(0, 100)}...</p>
           
           <div class="blog-stats">
-            <span title="Visualizações">${iconEye} ${post.views}</span>
-            <span title="Comentários">${iconMsg} ${post.comments}</span>
-            <span title="Tempo de Leitura">${iconClock} ${post.readTime}</span>
+            <span title="Visualizações">${iconEye} ${post.views || 0}</span>
+            <span title="Comentários">${iconMsg} ${post.comments || 0}</span>
+            <span title="Tempo">${iconClock} ${post.readTime || '3 min'}</span>
           </div>
 
           <div class="blog-footer">
@@ -198,23 +185,16 @@ document.addEventListener("DOMContentLoaded", () => {
       </a>
     `).join('');
 
-    // Animação de Entrada dos Cards
+    // Animação de Entrada
     if (window.gsap && window.ScrollTrigger) {
-      gsap.from(".reveal-card", {
-        x: -20, 
-        opacity: 20, 
-        duration: 0.8, 
-        stagger: .1, 
-        ease: "power2.out",
-        scrollTrigger: { 
-          trigger: "#homeBlogGrid", 
-          start: "top 85%" 
-        }
+      window.gsap.from(".reveal-card", {
+        y: 50, opacity: 0, filter: "blur(4px)", stagger: .1, ease: "power2.out",
+        scrollTrigger: { trigger: "#homeBlogGrid", start: "top 90%" }
       });
     }
   }
 
-  // Lógica para páginas internas
+  // Lógica Interna
   const pageSlug = document.body.getAttribute("data-empreendimento");
   if (pageSlug) {
     import("./render-empreendimento.js");

@@ -104,7 +104,7 @@ export function initHomeAnimations() {
     tl.to(bg, { opacity: 1, duration: 1, ease: "none" });
 
     // 2. SCROLL VAZIO (Apreciação)
-    tl.to({}, { duration: 1.5 });
+    tl.to({}, { duration: 1 });
 
     // 3. CONTEÚDO ENTRA
     tl.to(contentGroup, { 

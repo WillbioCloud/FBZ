@@ -41,7 +41,7 @@
 .nav__links a:hover { color: #fff; }
 
 
-/* --- HERO --- */
+/* --- HERO (CORRIGIDO PARA FIXO) --- */
 .hero {
   position: relative;
   height: 100vh;
@@ -49,20 +49,22 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  /* O container pai (hero) rola, mas o filho (bg) fica preso na tela */
 }
 
 .hero__bg {
-  position: absolute;
+  position: fixed; /* O SEGREDO: Fixed prende o vídeo no fundo da tela */
   inset: 0;
-  background-size: cover;
-  background-position: center;
-  z-index: -2;
-  animation: zoomSlow 20s infinite alternate;
+  z-index: -2; /* Fica atrás de tudo */
+  will-change: transform;
 }
 
-@keyframes zoomSlow {
-  from { transform: scale(1); }
-  to { transform: scale(1.15); }
+/* Garante que o vídeo cubra toda a área sem distorcer */
+.hero__bg video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 .hero__overlay {
@@ -98,20 +100,48 @@
   display: block;
 }
 
-
 /* =========================================================
-   MINI NAVBAR (por seção)
-   - aparece/fade via GSAP
+   BACKGROUNDS FIXOS DA VITRINE 
+   (Essencial para que os fundos dos empreendimentos
+    também fiquem fixos e cubram o vídeo quando rolar)
 ========================================================= */
+#bg-container {
+  position: fixed;
+  inset: 0;
+  z-index: -1; /* Fica ACIMA do vídeo (-2) */
+  pointer-events: none;
+}
+
+.bg-item {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.bg-img-layer {
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+}
+
+.bg-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+}
+
+/* --- MINI NAVBAR --- */
 .mini-nav {
-  position: absolute; /* Absoluto em relação ao .project-container */
-  bottom: -100px;      /* Fica abaixo do conteúdo principal */
+  position: absolute; 
+  bottom: -100px;      
   left: 50%;
   transform: translateX(-50%);
   z-index: 10;
   display: flex;
   justify-content: center;
-  pointer-events: none; /* Deixa clicar através, exceto nos botões */
+  pointer-events: none; 
 }
 
 .mini-nav__inner {
@@ -119,33 +149,13 @@
   display: flex;
   align-items: center;
   gap: 14px;
-
   padding: 10px 14px;
   border-radius: 999px;
-
   background: rgba(255, 255, 255, 0.027);
   border: 1px solid rgba(255,255,255,0.14);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-
   box-shadow: 0 18px 40px rgba(0, 0, 0, 0.178);
-}
-
-.mini-nav__label {
-  font-family: 'Inter', sans-serif;
-  font-size: 0.86rem;
-  font-weight: 600;
-  color: rgba(255,255,255,0.85);
-  max-width: 240px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.mini-nav__controls {
-  display: flex;
-  align-items: center;
-  gap: 8px;
 }
 
 .mini-nav__btn {
@@ -167,7 +177,6 @@
   transform: translateY(-1px);
 }
 
-/* Setas Laterais */
 .nav-arrow {
   background: none;
   border: none;
@@ -190,7 +199,6 @@
   stroke-width: 2.5;
 }
 
-/* Container das Bolinhas */
 .mini-nav__dots {
   display: flex;
   align-items: center;
@@ -201,7 +209,7 @@
 }
 
 .mini-nav__btn {
-  width: 10px; /* Área de clique */
+  width: 10px;
   height: 10px;
   border-radius: 50%;
   display: grid;
@@ -232,8 +240,6 @@
 
 
 /* --- VITRINE DE EMPREENDIMENTOS --- */
-
-/* A Seção Principal */
 .project-section {
   min-height: 100vh; 
   display: flex;
@@ -251,7 +257,7 @@
   gap: 60px;
   position: relative;
   z-index: 10;
-  width: 100%; /* Garante largura para posicionamento */
+  width: 100%;
 }
 
 @media (min-width: 1024px) {
@@ -265,7 +271,6 @@
   }
 }
 
-/* Card da mídia */
 .perspective-container {
   width: 100%;
   max-width: 450px;
@@ -298,7 +303,6 @@
   border-color: var(--accent);
 }
 
-/* Wrapper de mídia (logo/galeria) */
 .project-card-media {
   position: absolute;
   inset: 0;
@@ -307,7 +311,6 @@
   padding: 28px;
 }
 
-/* Camada LOGO */
 .project-card-media--logo {
   z-index: 2;
   background:
@@ -325,18 +328,9 @@
   transform: translateZ(0);
 }
 
-/* Camada GALERIA */
 .project-card-media--gallery {
   z-index: 1;
-  padding: 0; /* a stack ocupa tudo */
-}
-
-.project-gallery-stack {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.18);
+  padding: 0;
 }
 
 .project-gallery-img {
@@ -345,18 +339,13 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-
-  /* a troca é por opacity */
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.35s ease, visibility 0.35s ease;
-
-  /* leve contraste pra ficar cinema */
   filter: saturate(1.08) contrast(1.05);
   transform: translateZ(0);
 }
 
-/* Badge */
 .card-badge {
   position: absolute;
   top: 20px;
@@ -373,7 +362,6 @@
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
-/* Texto */
 .text-content {
   width: 100%;
   text-align: center;
@@ -420,7 +408,6 @@
   .project-desc { margin-left: 0; margin-right: 0; }
 }
 
-/* Botões */
 .project-actions {
   display: flex;
   gap: 16px;
@@ -480,7 +467,7 @@
   background: #050706;
 }
 
-/* Estado inicial (evita flash antes do GSAP) */
+/* Estado inicial */
 .project-section .project-content {
   opacity: 0;
   transform: translateY(90px);
@@ -490,63 +477,7 @@
   opacity: 0;
 }
 
-/* =========================
-   LOGIN & USER UI
-========================= */
-.nav-auth-area {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  margin-left: 20px;
-  padding-left: 20px;
-  border-left: 1px solid rgba(255,255,255,0.1);
-}
-
-.btn-login-google {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  background: #fff;
-  color: #333;
-  font-weight: 600;
-  font-size: 0.9rem;
-  padding: 8px 16px;
-  border-radius: 50px;
-  transition: transform 0.2s;
-  border: none;
-  cursor: pointer;
-}
-.btn-login-google:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(255,255,255,0.2);
-}
-.btn-login-google svg { width: 18px; height: 18px; }
-
-/* Avatar do Usuário Logado */
-.user-profile {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  cursor: pointer;
-}
-.user-avatar {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  border: 2px solid var(--accent);
-  object-fit: cover;
-}
-.user-name {
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: #fff;
-  display: none;
-}
-@media(min-width: 768px) { .user-name { display: block; } }
-
-/* =========================
-   BLOG STYLES
-========================= */
+/* BLOG */
 .blog-header {
   padding-top: 140px;
   padding-bottom: 60px;
@@ -562,7 +493,6 @@
 @media (min-width: 768px) { .blog-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (min-width: 1024px) { .blog-grid { grid-template-columns: repeat(3, 1fr); } }
 
-/* Card do Blog */
 .blog-card {
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -572,12 +502,10 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-  
-  /* Reset de link */
   text-decoration: none;
   color: inherit;
   cursor: pointer;
-  position: relative; /* Para efeitos */
+  position: relative;
 }
 
 .blog-card:hover {
@@ -631,7 +559,7 @@
 
 .blog-footer {
   padding-top: 16px;
-  border-top: 1px solid rgba(255,255,255,0.08);
+  border-top: none;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -639,13 +567,6 @@
   color: rgba(255, 255, 255, 0.5);
 }
 
-.blog-footer i {
-    font-style: normal;
-    color: #87d447;
-    font-weight: 600;
-}
-
-/* Ajuste no "Ler mais" para parecer botão/link mesmo sendo span */
 .read-more {
   color: #fff;
   font-weight: 600;
@@ -659,9 +580,7 @@
   color: var(--accent);
 }
 
-/* =========================
-   PÁGINA DE POST (Artigo)
-========================= */
+/* ARTIGO */
 .article-header {
   padding: 160px 0 60px;
   text-align: center;
@@ -695,7 +614,6 @@
   object-fit: cover;
 }
 
-/* Corpo do Texto (Prose) */
 .article-body {
   max-width: 740px;
   margin: 0 auto;
@@ -713,7 +631,6 @@
 .article-body li { margin-bottom: 10px; }
 .article-body strong { color: var(--accent); }
 
-/* Barra de Interação (Like/Share) */
 .interaction-bar {
   max-width: 740px;
   margin: 60px auto;
@@ -763,7 +680,6 @@
 }
 .share-icon:hover { transform: translateY(-3px); background: var(--accent); color: #000; }
 
-/* Comentários */
 .comments-section {
   max-width: 740px;
   margin: 0 auto 100px;
@@ -796,7 +712,7 @@
 }
 .comment-author { color: #fff; font-weight: 700; }
 
-/* ESTATÍSTICAS DO CARD (Novo) */
+/* ESTATÍSTICAS DO CARD */
 .blog-stats {
   display: flex;
   align-items: center;
@@ -822,11 +738,4 @@
   fill: none;
   stroke: currentColor;
   stroke-width: 2;
-}
-
-/* Ajuste no Footer para não ficar apertado */
-.blog-footer {
-  margin-top: 10px;
-  border-top: none; /* Removemos a borda antiga pois o stats já tem */
-  padding-top: 0;
 }

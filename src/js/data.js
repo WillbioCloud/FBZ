@@ -92,7 +92,7 @@ export const FBZ_DATA = {
     {
         slug: "residencial-primaver-2",
         ano: 2020,
-        nome: "Residencial Primaver-2",
+        nome: "Residencial Primavera 2",
         status: "Disponível",
         slogan: "Vida em harmonia com a natureza.",
         descCurta: "Loteamento com áreas verdes e infraestrutura moderna.",
