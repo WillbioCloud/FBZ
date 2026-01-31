@@ -1,3 +1,5 @@
+// src/js/animation.js
+
 function splitTextToSpans(selector) {
   const elements = document.querySelectorAll(selector);
   elements.forEach(el => {
@@ -13,7 +15,7 @@ export function initHomeAnimations() {
   if (!window.gsap || !window.ScrollTrigger) return;
   gsap.registerPlugin(ScrollTrigger);
 
-  // 1. Títulos (Split Text)
+  // 1. Títulos (Entrada Rápida e Suave)
   splitTextToSpans('.split-animate');
   
   document.querySelectorAll('.split-animate').forEach(title => {
@@ -22,27 +24,27 @@ export function initHomeAnimations() {
     gsap.fromTo(chars, 
       { 
         opacity: 0, 
-        y: 80, 
+        y: 100, 
         rotateX: -90 
       },
       {
         opacity: 1,
         y: 0,
         rotateX: 0,
-        stagger: 0.03, // Stagger mais rápido para responder melhor ao scroll rápido
+        stagger: 0.04,
         duration: 1,
         ease: "power2.out",
         scrollTrigger: {
           trigger: title,
-          start: "top 90%",
-          end: "top 40%",
-          scrub: 0.5, // Menor valor = mais responsivo ao scroll automático
+          start: "top 95%", // Começa assim que entra na tela
+          end: "center center", 
+          scrub: 1, // Scrub 1 é o equilíbrio perfeito para rolagem automática
         }
       }
     );
   });
 
-  // 2. Backgrounds e Cor Sólida
+  // 2. Backgrounds (Fade Simples e Elegante)
   const sections = document.querySelectorAll('.project-section');
   const bgs = document.querySelectorAll('.bg-item');
 
@@ -50,54 +52,51 @@ export function initHomeAnimations() {
     const bg = bgs[index];
     if (!bg) return;
     
-    const solidLayer = bg.querySelector('.solid-overlay');
+    const imgLayer = bg.querySelector('.bg-img-layer');
 
-    // Timeline Mestra da Seção
+    // Timeline principal
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: section,
-        start: "top bottom", // Começa antes de entrar
-        end: "bottom top",   // Termina quando sair totalmente
+        start: "top bottom", // Início da seção
+        end: "bottom top",   // Fim da seção
         scrub: true,
       }
     });
 
-    // Passo 1: Fade In do container (fundo preto ou imagem anterior)
-    tl.fromTo(bg, { opacity: 0 }, { opacity: 1, duration: 0.15, ease: "none" });
+    // FASE 1: Fade In Suave
+    tl.fromTo(bg, 
+      { opacity: 0 }, 
+      { opacity: 1, duration: 0.15, ease: "power1.inOut" }
+    );
 
-    // Passo 2: Animação da Cor Sólida (Expandir e Revelar Imagem)
-    // A cor sólida começa visível (cobrindo a imagem). 
-    // No meio do scroll, ela cresce (scale) e some (opacity), revelando a foto.
-    if (solidLayer) {
-      tl.fromTo(solidLayer, 
-        { opacity: 1, scale: 1 }, 
-        { 
-          opacity: 0, 
-          scale: 1.5, // Efeito de "explosão" suave
-          duration: 0.4, 
-          ease: "power1.inOut" 
-        }, 
-        "<" // Começa junto com o fade in anterior ou logo após
+    // FASE 2: Zoom lento na imagem (Cinematográfico)
+    if (imgLayer) {
+      tl.fromTo(imgLayer, 
+        { scale: 1.15 }, 
+        { scale: 1.0, duration: 0.7, ease: "none" }, 
+        "<" 
       );
     }
 
-    // Passo 3: Hold (Mantém a imagem visível enquanto lê o texto)
-    tl.to(bg, { opacity: 1, duration: 0.3 }); // Espaço "vazio" na timeline para segurar
+    // FASE 3: Mantém (Hold)
+    // Ocupa espaço na timeline para a imagem ficar parada enquanto rola o texto
+    tl.to({}, { duration: 0.2 }); 
 
-    // Passo 4: Fade Out na saída
-    tl.to(bg, { opacity: 0, duration: 0.15, ease: "none" });
+    // FASE 4: Fade Out
+    tl.to(bg, { opacity: 0, duration: 0.15, ease: "power1.inOut" });
   });
 
-  // 3. Parallax Texto/Elementos
+  // 3. Parallax dos Elementos (Texto vs Imagem Pequena)
   sections.forEach(section => {
     const text = section.querySelector('.text-content');
     const img = section.querySelector('.perspective-container');
 
-    // Texto sobe suavemente
+    // Texto sobe
     gsap.fromTo(text,
-      { y: 100 },
+      { y: 150 },
       {
-        y: -100,
+        y: -150,
         scrollTrigger: {
           trigger: section,
           start: "top bottom",
@@ -107,24 +106,24 @@ export function initHomeAnimations() {
       }
     );
     
-    // Imagem decorativa com parallax reverso
+    // Imagem decorativa sobe em outra velocidade (profundidade)
     if (img) {
       gsap.fromTo(img,
-        { y: 150 },
+        { y: 250 },
         {
-          y: -150,
+          y: -250,
           scrollTrigger: {
             trigger: section,
             start: "top bottom",
             end: "bottom top",
-            scrub: 1.2
+            scrub: 1.5
           }
         }
       );
     }
   });
 
-  // Animação Hero (Texto Principal da Home)
+  // Hero Texto Inicial
   gsap.from(".reveal-text", {
     y: 50,
     opacity: 0,

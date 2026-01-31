@@ -11,50 +11,66 @@
 }
 
 * { box-sizing: border-box; }
-html, body { margin: 0; padding: 0; height: 100%; background-color: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; overflow-x: hidden; }
+
+/* FIX DO SCROLL DUPLO E AUTO-SCROLL */
+html {
+  overflow-x: hidden;
+  width: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+  position: relative;
+}
 
 /* Background Container Fixo */
-/* Ajustes no BG Item */
+#bg-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: -1;
+  pointer-events: none;
+  background-color: var(--bg);
+}
+
 .bg-item {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   opacity: 0;
-  transition: none; /* GSAP controla tudo agora */
+  /* Transição suave controlada via GSAP agora */
 }
 
-/* Camadas Internas */
+/* Camada da Imagem */
 .bg-img-layer {
   position: absolute;
   inset: 0;
   background-size: cover;
   background-position: center;
   z-index: 1;
+  transform: scale(1.1); /* Começa com leve zoom */
 }
 
-.solid-overlay {
-  position: absolute;
-  inset: 0;
-  z-index: 2; /* Fica acima da imagem */
-  background-color: #000; /* Fallback */
-  transform-origin: center center;
-}
-
+/* Overlay Escuro (para leitura) */
 .bg-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to bottom, rgba(0,0,0,0.4), rgba(0,0,0,0.8));
-  z-index: 3; /* Fica acima de tudo (para leitura do texto) */
+  background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.8));
+  z-index: 2;
 }
 
-/* SplitText Customizado */
-.char {
-  display: inline-block;
-  will-change: transform, opacity;
-}
+/* SplitText e Tipografia */
+.char { display: inline-block; will-change: transform, opacity; }
 
-/* Layout Geral */
 .container {
   width: 100%;
   max-width: var(--container);
@@ -62,10 +78,5 @@ html, body { margin: 0; padding: 0; height: 100%; background-color: var(--bg); c
   padding: 0 var(--px);
 }
 
-.section {
-  padding: 100px 0;
-}
-
-/* Tipografia */
 h1, h2, h3 { font-family: 'Montserrat', sans-serif; font-weight: 700; }
-.reveal-text { opacity: 0; } /* Evita flash antes do JS carregar */
+.reveal-text { opacity: 0; }
