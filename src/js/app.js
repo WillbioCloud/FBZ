@@ -1,52 +1,85 @@
 import { FBZ_DATA } from './data.js';
 
 document.addEventListener('DOMContentLoaded', () => {
-  gsap.registerPlugin(ScrollTrigger);
-  
-  const vitrineContainer = document.getElementById('vitrine');
-  const pageSlug = document.body.getAttribute('data-slug');
+  if (window.gsap && window.ScrollTrigger) {
+    gsap.registerPlugin(ScrollTrigger);
+  }
 
-  // ==========================================
-  // CENÁRIO 1: ESTAMOS NA HOME (Vitrine)
-  // ==========================================
+  const vitrineContainer = document.getElementById('vitrine');
+  
+  let bgContainer = document.getElementById('bg-container');
+  if (!bgContainer) {
+    bgContainer = document.createElement('div');
+    bgContainer.id = 'bg-container';
+    document.body.prepend(bgContainer);
+  }
+
+  // --- Lógica Home ---
   if (vitrineContainer) {
+    vitrineContainer.innerHTML = '';
+    bgContainer.innerHTML = '';
+
     FBZ_DATA.empreendimentos.forEach((emp, index) => {
-      // Alternar lado da imagem (esquerda/direita)
+      // 1. Background Fixo (Camadas: Imagem < Cor Sólida < Overlay Escuro)
+      const bgDiv = document.createElement('div');
+      bgDiv.className = `bg-item bg-item-${index}`;
+      
+      // Camada A: Imagem
+      const imgLayer = document.createElement('div');
+      imgLayer.className = 'bg-img-layer';
+      imgLayer.style.backgroundImage = `url('${emp.heroImg}')`;
+      bgDiv.appendChild(imgLayer);
+
+      // Camada B: Cor Sólida (Nova Animação)
+      const solidLayer = document.createElement('div');
+      solidLayer.className = 'solid-overlay';
+      solidLayer.style.backgroundColor = emp.corHex || '#111';
+      bgDiv.appendChild(solidLayer);
+      
+      // Camada C: Overlay Escuro (Leitura)
+      const overlay = document.createElement('div');
+      overlay.className = 'bg-overlay';
+      bgDiv.appendChild(overlay);
+      
+      bgContainer.appendChild(bgDiv);
+
+      // 2. Seção de Conteúdo (Mais alta para mais tempo de scroll)
       const reverse = index % 2 !== 0 ? 'lg:flex-row-reverse' : '';
       
+      // ATENÇÃO: min-h-[160vh] aumenta o tempo da rolagem
       const sectionHTML = `
-        <section class="container mx-auto px-6 project-section">
-          <div class="flex flex-col lg:flex-row items-center gap-12 ${reverse}">
-            
-            <div class="w-full lg:w-1/2 h-[500px] overflow-hidden rounded-2xl relative group cursor-pointer reveal-img">
-              <a href="${emp.link}">
-                <div class="absolute inset-0 bg-black/20 group-hover:bg-black/0 transition-all z-10"></div>
-                <img src="${emp.heroImg}" alt="${emp.nome}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-                <div class="absolute top-6 left-6 z-20">
-                  <span class="bg-white/90 backdrop-blur text-stone-900 px-4 py-1 rounded-full text-xs font-bold uppercase tracking-wider shadow-sm">
-                    ${emp.status}
-                  </span>
-                </div>
-              </a>
-            </div>
-
-            <div class="w-full lg:w-1/2 reveal-text">
-              <h2 class="text-4xl md:text-5xl font-serif font-bold text-stone-900 mb-4">${emp.nome}</h2>
-              <p class="text-xl text-stone-500 font-light mb-6">${emp.slogan}</p>
-              <p class="text-stone-600 mb-8 leading-relaxed">${emp.descCurta}</p>
+        <section class="project-section min-h-[160vh] flex items-center justify-center relative py-20" data-index="${index}">
+          <div class="container mx-auto px-6 relative z-10">
+            <div class="flex flex-col lg:flex-row items-center gap-16 ${reverse}">
               
-              <ul class="space-y-2 mb-8">
-                ${emp.destaques.slice(0, 3).map(d => `
-                  <li class="flex items-center gap-3 text-stone-700">
-                    <span class="w-2 h-2 rounded-full bg-emerald-500"></span> ${d}
-                  </li>
-                `).join('')}
-              </ul>
-
-              <div class="flex gap-4">
-                <a href="${emp.link}" class="px-8 py-3 bg-stone-900 text-white rounded-lg font-bold hover:bg-stone-800 transition">Ver Detalhes</a>
-                <a href="https://wa.me/${FBZ_DATA.global.whatsapp}" target="_blank" class="px-8 py-3 border border-stone-300 text-stone-700 rounded-lg font-bold hover:bg-stone-50 transition">WhatsApp</a>
+              <div class="w-full lg:w-5/12 aspect-[4/5] relative group cursor-pointer perspective-container">
+                 <a href="${emp.link}" class="block h-full w-full overflow-hidden rounded-2xl border border-white/10 shadow-2xl relative transform transition-transform duration-700 hover:scale-[1.02]">
+                    <div class="absolute inset-0 bg-cover bg-center transition-transform duration-1000 hover:scale-110" style="background-image: url('${emp.heroImg}');"></div>
+                    <div class="absolute top-6 left-6 z-20">
+                      <span class="bg-white/90 backdrop-blur text-stone-900 px-4 py-1 rounded-full text-xs font-bold uppercase tracking-wider shadow-sm">
+                        ${emp.status}
+                      </span>
+                    </div>
+                 </a>
               </div>
+
+              <div class="w-full lg:w-6/12 text-content">
+                <h2 class="split-animate text-5xl md:text-7xl font-serif font-bold text-white mb-6 leading-tight">
+                  ${emp.nome}
+                </h2>
+                <p class="text-2xl font-light mb-8 opacity-90" style="color: ${emp.corHex}">${emp.slogan}</p>
+                <p class="text-lg text-gray-300 mb-10 leading-relaxed max-w-xl">${emp.descCurta}</p>
+                
+                <div class="flex flex-wrap gap-4">
+                  <a href="${emp.link}" class="btn-explore px-10 py-4 text-white rounded-full font-bold transition shadow-lg" style="background-color: ${emp.corHex}">
+                    Explorar
+                  </a>
+                  <a href="https://wa.me/${FBZ_DATA.global.whatsapp}" target="_blank" class="px-10 py-4 border border-white/30 text-white rounded-full font-bold hover:bg-white/10 transition backdrop-blur-sm">
+                    WhatsApp
+                  </a>
+                </div>
+              </div>
+
             </div>
           </div>
         </section>
@@ -54,55 +87,14 @@ document.addEventListener('DOMContentLoaded', () => {
       vitrineContainer.insertAdjacentHTML('beforeend', sectionHTML);
     });
 
-    initAnimations();
+    import('./animation.js').then(module => {
+      if(module.initHomeAnimations) module.initHomeAnimations();
+    });
   }
 
-  // ==========================================
-  // CENÁRIO 2: ESTAMOS EM UMA PÁGINA DE PROJETO
-  // ==========================================
+  // --- Lógica Páginas Internas ---
+  const pageSlug = document.body.getAttribute('data-empreendimento');
   if (pageSlug) {
-    const project = FBZ_DATA.empreendimentos.find(p => p.slug === pageSlug);
-    
-    if (project) {
-      // Preencher dados dinamicamente
-      document.getElementById('p-title').innerText = project.nome;
-      document.getElementById('p-slogan').innerText = project.slogan;
-      document.getElementById('p-status').innerText = project.status;
-      document.getElementById('p-desc').innerText = project.descCurta + " " + project.slogan; // Aqui você pode ter um campo 'fullDesc' no JSON
-      document.getElementById('p-hero-img').src = project.heroImg;
-      
-      const featuresContainer = document.getElementById('p-features');
-      project.destaques.forEach(feat => {
-        featuresContainer.innerHTML += `<li class="flex items-center gap-2 p-4 bg-gray-50 rounded-lg"><span class="text-green-600">✓</span> ${feat}</li>`;
-      });
-
-      // Link do WhatsApp específico
-      const msg = encodeURIComponent(`Olá, vi o ${project.nome} no site e quero a tabela.`);
-      document.getElementById('p-whatsapp').href = `https://wa.me/${FBZ_DATA.global.whatsapp}?text=${msg}`;
-    }
+    import('./render-empreendimento.js');
   }
 });
-
-function initAnimations() {
-  // Animação de entrada dos textos
-  gsap.utils.toArray('.reveal-text').forEach(elem => {
-    gsap.from(elem, {
-      scrollTrigger: { trigger: elem, start: "top 80%" },
-      y: 50,
-      opacity: 0,
-      duration: 1,
-      ease: "power3.out"
-    });
-  });
-
-  // Animação das imagens
-  gsap.utils.toArray('.reveal-img').forEach(elem => {
-    gsap.from(elem, {
-      scrollTrigger: { trigger: elem, start: "top 80%" },
-      scale: 0.95,
-      opacity: 0,
-      duration: 1.2,
-      ease: "power2.out"
-    });
-  });
-}
