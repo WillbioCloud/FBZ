@@ -1,109 +1,133 @@
 export const FBZ_DATA = {
   global: {
-    whatsapp: "556193291812", 
+    whatsapp: "556193291812",
     whatsappDefaultMsg: "Olá! Vim pelo site da FBZ e gostaria de informações.",
   },
+
+  // Ordenado do mais novo para o mais antigo (ano desc)
   empreendimentos: [
-    {
-      slug: "cidade-inteligente",
-      ano: 2024,
-      nome: "Cidade Inteligente",
-      status: "Lançamento",
-      slogan: "Urbanismo moderno com tecnologia.",
-      descCurta: "O futuro chegou a Caldas Novas. Infraestrutura tecnológica e monitoramento 24h.",
-      heroImg: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80", 
-      corHex: "#0284c7", // Azul Tech
-      destaques: ["Iluminação LED", "Monitoramento Inteligente", "Wi-Fi nas praças", "Vias Planejadas"],
-      whatsappMsg: "Olá! Gostaria de saber mais sobre a tecnologia e tabela do Cidade Inteligente.",
-      faq: [
-         { q: "O que torna o bairro inteligente?", a: "Infraestrutura para automação e segurança conectada." },
-         { q: "Financiamento direto?", a: "Sim, direto com a construtora sem burocracia." }
-      ],
-      link: "/src/empreendimentos/cidade-inteligente.html"
-    },
-    {
-      slug: "cidade-verde",
-      ano: 2022,
-      nome: "Cidade Verde",
-      status: "Disponível",
-      slogan: "Vida ao ar livre com estrutura.",
-      descCurta: "Um projeto com foco em áreas verdes e organização urbana.",
-      heroImg: "https://images.unsplash.com/photo-1628744448839-4458d5789f2a?q=80",
-      corHex: "#15803d", // Verde Mata
-      destaques: ["Áreas verdes", "Infraestrutura pronta", "Planejamento", "Valorização"],
-      whatsappMsg: "Olá! Quero informações do Cidade Verde e etapas disponíveis.",
-      link: "/src/empreendimentos/cidade-verde.html",
-      etapasRelacionadas: [
-        { nome: "Cidade Universitária", slug: "cidade-universitaria" },
-        { nome: "Reserva da Mata", slug: "reserva-da-mata" }
-      ]
-    },
     {
       slug: "reserva-da-mata",
       ano: 2026,
       nome: "Reserva da Mata",
       status: "Lançamento",
-      slogan: "A natureza no seu quintal.",
-      descCurta: "O encontro perfeito entre urbanismo e preservação ambiental.",
-      heroImg: "https://images.unsplash.com/photo-1596568205422-77884d8525b6?q=80",
-      corHex: "#b45309", // Âmbar/Terra
-      destaques: ["Mata preservada", "Pista de caminhada", "Exclusividade", "Pré-Lançamento"],
-      whatsappMsg: "Estou interessado no lançamento Reserva da Mata.",
-      link: "/src/empreendimentos/reserva-da-mata.html"
+      slogan: "Viva em harmonia com a natureza.",
+      descCurta: "Loteamento ecológico com áreas preservadas.",
+      heroImg: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80",
+      logo: "https://cdn.appfacilita.com/companies/fbzcomvc/optimize/h200-fccb174023f3851c92d176a8f064a48f.jpg",
+      corHex: "#16a34a",
+      link: "/src/empreendimentos/reserva-da-mata.html",
     },
+
+    {
+      slug: "caminho-do-lago",
+      ano: 2025,
+      nome: "Caminho do Lago",
+      status: "Lançamento",
+      slogan: "Seu novo horizonte.",
+      descCurta: "Novo loteamento com conceito moderno.",
+      heroImg: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80",
+      logo: "/assets/img/logo/LOGO-CAMINHO-DO-LAGO.webp",
+      corHex: "#0ea5e9",
+      link: "#",
+    },
+
+    {
+      slug: "flamboyant",
+      ano: 2025,
+      nome: "Flamboyant",
+      status: "Pré-Lançamento",
+      slogan: "Exclusividade e conforto.",
+      descCurta: "Projeto premium em localização estratégica.",
+      heroImg: "https://images.unsplash.com/photo-1494526585095-c41746248156?q=80",
+      logo: "/assets/img/logo/LOGO-FLAMBOYANT.webp",
+      corHex: "#7e22ce",
+      link: "#",
+    },
+
+    {
+      slug: "morada-nobre",
+      ano: 2025,
+      nome: "Morada Nobre",
+      status: "Pré-Lançamento",
+      slogan: "Viva com nobreza.",
+      descCurta: "Residencial planejado com alto padrão.",
+      heroImg: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80",
+      logo: "/assets/img/logo/LOGO-MORADA-NOBRE.webp",
+      corHex: "#a16207",
+      link: "#",
+    },
+
+    {
+      slug: "cidade-inteligente",
+      ano: 2024,
+      nome: "Cidade Inteligente",
+      status: "Em Obras",
+      slogan: "Urbanismo moderno com tecnologia.",
+      descCurta: "Infraestrutura tecnológica e monitoramento 24h.",
+      heroImg: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80",
+      logo: "/assets/img/logo/LOGO-CIDADE-INTELIGENTE.webp",
+      corHex: "#0284c7",
+      link: "/src/empreendimentos/cidade-inteligente.html",
+
+      // ✅ Ajustes conforme você informou
+      entregaPrevistaAno: 2028,
+      observacao:
+        "Lotes vendidos antes da conclusão da infraestrutura. Empreendimento em construção com previsão de entrega em 2028.",
+    },
+
     {
       slug: "cidade-universitaria",
       ano: 2023,
       nome: "Cidade Universitária",
       status: "Em Obras",
       slogan: "Invista no polo de conhecimento.",
-      descCurta: "Localização estratégica ao lado das principais faculdades.",
+      descCurta: "Localização estratégica ao lado das faculdades.",
       heroImg: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80",
-      corHex: "#4338ca", // Indigo
-      destaques: ["Ao lado da faculdade", "Lotes comerciais", "Alta liquidez", "Transporte na porta"],
-      whatsappMsg: "Olá! Quero investir no Cidade Universitária.",
-      link: "/src/empreendimentos/cidade-universitaria.html"
+      logo: "/assets/img/logo/LOGO-CIDADE-UNIVERSITARIA.webp",
+      corHex: "#4338ca",
+      link: "/src/empreendimentos/cidade-universitaria.html",
     },
+
     {
-      slug: "setor-lago-sul",
-      ano: 2020,
-      nome: "Setor Lago Sul",
-      status: "Entregue",
-      slogan: "Viva perto do lago.",
-      descCurta: "Lotes residenciais com vista para o lago e infraestrutura completa.",
-      heroImg: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80",
-      corHex: "#0369a1", // Azul Lago
-      destaques: ["Vista para o lago", "Infraestrutura completa", "Segurança 24h", "Lazer"],
-      whatsappMsg: "Olá! Quero saber mais sobre o Setor Lago Sul.",
-      link: "/src/empreendimentos/setor-lago-sul.html"
+      slug: "cidade-verde",
+      ano: 2022,
+      nome: "Cidade Verde",
+      status: "Disponível",
+      slogan: "Vida ao ar livre com estrutura.",
+      descCurta: "Projeto com foco em áreas verdes e organização urbana.",
+      heroImg: "https://images.unsplash.com/photo-1628744448839-4458d5789f2a?q=80",
+      logo: "/assets/img/logo/LOGO-CIDADE-VERDE.webp",
+      corHex: "#15803d",
+      link: "/src/empreendimentos/cidade-verde.html",
     },
-    {
-      slug: "singapura-shopping",
-      ano: 2025,
-      nome: "Singapura Shopping",
-      status: "Em Obras",
-      slogan: "O novo centro comercial.",
-      descCurta: "Oportunidade única de investimento em um shopping moderno.",
-      heroImg: "https://images.unsplash.com/photo-1549924231-f129b911e442?q=80",
-      corHex: "#7e22ce", // Roxo Premium
-      destaques: ["Lojas variadas", "Estacionamento amplo", "Localização estratégica", "Alto fluxo"],
-      whatsappMsg: "Olá! Quero informações sobre o Singapura Shopping.",
-      link: "/src/empreendimentos/singapura-shopping.html"
-    },
+
     {
       slug: "cidade-das-flores",
       ano: 2021,
       nome: "Cidade das Flores",
       status: "Disponível",
       slogan: "Beleza e tranquilidade.",
-      descCurta: "Lotes residenciais em um ambiente florido e tranquilo.",
+      descCurta: "Ambiente florido e tranquilo.",
       heroImg: "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?q=80",
-      corHex: "#be185d", // Rosa/Magenta
-      destaques: ["Ambiente florido", "Tranquilidade", "Infraestrutura completa", "Segurança"],
-      whatsappMsg: "Olá! Quero saber mais sobre a Cidade das Flores.",
-      link: "/src/empreendimentos/cidade-das-flores.html"
-    }
-  ]
+      logo: "/assets/img/logo/LOGO-CIDADE-DAS-FLORES.webp",
+      corHex: "#be185d",
+      link: "/src/empreendimentos/cidade-das-flores.html",
+    },
+
+    {
+      slug: "setor-lago-sul",
+      ano: 2020,
+      nome: "Setor Lago Sul",
+      status: "Entregue",
+      slogan: "Viva perto do lago.",
+      descCurta: "Vista para o lago e infraestrutura completa.",
+      heroImg: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80",
+      logo: "/assets/img/logo/LOGO-LAGO-SUL.webp",
+      corHex: "#0369a1",
+      link: "/src/empreendimentos/setor-lago-sul.html",
+    },
+  ],
 };
 
 window.FBZ_DATA = FBZ_DATA;
