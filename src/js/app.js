@@ -1,11 +1,20 @@
+// src/js/app.js
 import { FBZ_DATA } from "./data.js";
+import { initAuth } from "./auth.js"; // Importa o Auth que criamos
 
 document.addEventListener("DOMContentLoaded", () => {
+  // 1. Inicia Auth (Login Google)
+  initAuth();
+
+  // 2. Inicializa GSAP
   if (window.gsap && window.ScrollTrigger) {
     gsap.registerPlugin(ScrollTrigger);
   }
 
   const vitrineContainer = document.getElementById("vitrine");
+  const homeBlogContainer = document.getElementById("homeBlogGrid"); // Novo Container
+
+  // Cria container para o Background Fixo
   let bgContainer = document.getElementById("bg-container");
   if (!bgContainer) {
     bgContainer = document.createElement("div");
@@ -13,15 +22,13 @@ document.addEventListener("DOMContentLoaded", () => {
     document.body.prepend(bgContainer);
   }
 
-  // Helpers
+  // --- HELPERS (Galeria, Logo, Imagem) ---
   function getGallery(emp) {
     const arr = emp.gallery || emp.imagens || emp.images || emp.galeria || null;
     if (Array.isArray(arr) && arr.length) return arr;
-    // Fallback: repete a heroImg para ter o que mostrar
     return [emp.heroImg, emp.heroImg, emp.heroImg];
   }
 
-  // Tenta achar a logo (você pode ajustar os caminhos conforme sua pasta)
   function guessLogoPath(emp) {
     return [
       emp.logo,
@@ -31,22 +38,18 @@ document.addEventListener("DOMContentLoaded", () => {
     ].filter(Boolean);
   }
 
-  // Função de troca de imagem
   function switchGalleryImage(sectionEl, index) {
     const imgs = Array.from(sectionEl.querySelectorAll(".project-gallery-img"));
     if (!imgs.length) return;
 
-    // Lógica Circular (se passar do fim, volta pro começo)
     let safeIndex = index;
     if (index < 0) safeIndex = imgs.length - 1;
     if (index >= imgs.length) safeIndex = 0;
 
-    // Atualiza Dots
     const btns = Array.from(sectionEl.querySelectorAll(".mini-nav__btn"));
     btns.forEach(b => b.classList.remove("is-active"));
     if (btns[safeIndex]) btns[safeIndex].classList.add("is-active");
 
-    // Troca Imagem (Crossfade)
     imgs.forEach((img, i) => {
       const show = i === safeIndex;
       if (window.gsap) {
@@ -55,12 +58,10 @@ document.addEventListener("DOMContentLoaded", () => {
         img.style.opacity = show ? 1 : 0;
       }
     });
-
-    // Salva o índice atual no elemento pai para referência das setas
     sectionEl.dataset.currentIndex = safeIndex;
   }
 
-  // --- RENDERIZAR VITRINE ---
+  // --- RENDERIZAR VITRINE (EMPREENDIMENTOS) ---
   if (vitrineContainer) {
     vitrineContainer.innerHTML = "";
     bgContainer.innerHTML = "";
@@ -77,26 +78,25 @@ document.addEventListener("DOMContentLoaded", () => {
       const logoCandidates = guessLogoPath(emp);
       const reverseClass = index % 2 !== 0 ? "reverse" : "";
 
-      // Gera os Dots
+      // Dots e Imagens
       const dotsHTML = gallery.map((_, i) => `
         <button type="button" class="mini-nav__btn ${i === 0 ? "is-active" : ""}" data-img-index="${i}">
           <span class="mini-nav__dot"></span>
         </button>
       `).join("");
 
-      // Gera as Imagens
       const galleryHTML = gallery.map((src, i) => `
         <img class="project-gallery-img" src="${src}" style="opacity:${i === 0 ? 1 : 0}" loading="lazy">
       `).join("");
 
-      // SVG Icons para as setas
       const chevronLeft = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>`;
       const chevronRight = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>`;
 
       const sectionHTML = `
         <section class="project-section" data-index="${index}" data-current-index="0">
-          <div class="container project-container" style="position: relative;"> <div class="project-content ${reverseClass}">
-              
+          <div class="container project-container" style="position: relative;">
+            
+            <div class="project-content ${reverseClass}">
               <div class="perspective-container group">
                 <a href="${emp.link}" class="project-card-link">
                   <div class="project-card-media project-card-media--logo">
@@ -118,15 +118,12 @@ document.addEventListener("DOMContentLoaded", () => {
                   <a href="https://wa.me/${FBZ_DATA.global.whatsapp}" class="btn btn--ghost">WhatsApp</a>
                 </div>
               </div>
-
             </div>
 
             <div class="mini-nav">
               <div class="mini-nav__inner">
                 <button class="nav-arrow prev">${chevronLeft}</button>
-                <div class="mini-nav__dots">
-                  ${dotsHTML}
-                </div>
+                <div class="mini-nav__dots">${dotsHTML}</div>
                 <button class="nav-arrow next">${chevronRight}</button>
               </div>
             </div>
@@ -137,7 +134,7 @@ document.addEventListener("DOMContentLoaded", () => {
       vitrineContainer.insertAdjacentHTML("beforeend", sectionHTML);
     });
 
-    // 3. Inicializa Logos (Fallback)
+    // Inicializa Logos e Eventos
     document.querySelectorAll("img.project-logo").forEach(img => {
       const candidates = JSON.parse(img.dataset.logoCandidates || "[]");
       let i = 0;
@@ -149,13 +146,10 @@ document.addEventListener("DOMContentLoaded", () => {
       tryNext();
     });
 
-    // 4. Lógica de Clique (Setas e Dots)
     document.querySelectorAll(".project-section").forEach(section => {
-      // Dots
       section.querySelectorAll(".mini-nav__btn").forEach(btn => {
         btn.addEventListener("click", () => switchGalleryImage(section, Number(btn.dataset.imgIndex)));
       });
-      // Setas
       section.querySelector(".prev").addEventListener("click", () => {
         const curr = Number(section.dataset.currentIndex || 0);
         switchGalleryImage(section, curr - 1);
@@ -166,7 +160,63 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     });
 
-    // 5. Inicia Animações
+    // Inicia Animações (Scroll)
     import("./animation.js").then(m => m.initHomeAnimations && m.initHomeAnimations());
+  }
+
+  // --- RENDERIZAR BLOG PREVIEW ---
+  if (homeBlogContainer && FBZ_DATA.blog) {
+    const latestPosts = FBZ_DATA.blog.slice(0, 4);
+    
+    // Ícones SVG
+    const iconEye = `<svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>`;
+    const iconMsg = `<svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>`;
+    const iconClock = `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>`;
+
+    homeBlogContainer.innerHTML = latestPosts.map(post => `
+      <a href="/src/blog-post.html?slug=${post.slug}" class="blog-card reveal-card" style="text-decoration:none; color:inherit;">
+        <img src="${post.thumb}" alt="${post.titulo}" class="blog-thumb" loading="lazy">
+        <div class="blog-body">
+          <div class="blog-meta">
+            <span>${post.categoria}</span>
+            <span>${post.data}</span>
+          </div>
+          <h3 class="blog-title" style="font-size: 1.1rem;">${post.titulo}</h3>
+          <p class="blog-excerpt" style="font-size: 0.9rem;">${post.resumo.substring(0, 100)}...</p>
+          
+          <div class="blog-stats">
+            <span title="Visualizações">${iconEye} ${post.views}</span>
+            <span title="Comentários">${iconMsg} ${post.comments}</span>
+            <span title="Tempo de Leitura">${iconClock} ${post.readTime}</span>
+          </div>
+
+          <div class="blog-footer">
+            <span style="font-size:0.8rem">Por ${post.autor}</span>
+            <span class="read-more">Ler mais <span>→</span></span>
+          </div>
+        </div>
+      </a>
+    `).join('');
+
+    // Animação de Entrada dos Cards
+    if (window.gsap && window.ScrollTrigger) {
+      gsap.from(".reveal-card", {
+        x: -20, 
+        opacity: 20, 
+        duration: 0.8, 
+        stagger: .1, 
+        ease: "power2.out",
+        scrollTrigger: { 
+          trigger: "#homeBlogGrid", 
+          start: "top 85%" 
+        }
+      });
+    }
+  }
+
+  // Lógica para páginas internas
+  const pageSlug = document.body.getAttribute("data-empreendimento");
+  if (pageSlug) {
+    import("./render-empreendimento.js");
   }
 });

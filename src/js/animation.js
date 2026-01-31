@@ -1,78 +1,86 @@
 // src/js/animation.js
 
-function splitTextToSpans(selector) {
-  const elements = document.querySelectorAll(selector);
-  elements.forEach((el) => {
-    if (el.dataset.split === "true") return;
-    const text = (el.textContent || "").trim();
-    if (!text) return;
-    el.innerHTML = text.split("").map(char => char === " " ? `<span class="char" style="display:inline-block; width:0.3em;">&nbsp;</span>` : `<span class="char" style="display:inline-block;">${char}</span>`).join("");
-    el.dataset.split = "true";
-  });
-}
-
 export function initHomeAnimations() {
-  if (!window.gsap || !window.ScrollTrigger) return;
-  const { gsap, ScrollTrigger } = window;
+  // Verifica dependências
+  if (!window.gsap || !window.ScrollTrigger) {
+    console.warn("GSAP não encontrado");
+    return;
+  }
+  // Verifica SplitType (novo)
+  if (!window.SplitType) {
+    console.warn("SplitType não encontrado. Adicione o CDN no HTML.");
+    return;
+  }
+
+  const { gsap, ScrollTrigger, SplitType } = window;
   gsap.registerPlugin(ScrollTrigger);
 
-  // Limpeza para evitar bugs em reloads
+  // LIMPEZA
   ScrollTrigger.getAll().forEach((t) => t.kill());
   gsap.killTweensOf("*");
 
-  // 1. Títulos do Hero
-  splitTextToSpans(".split-animate");
-  document.querySelectorAll(".split-animate").forEach((title) => {
-    const chars = title.querySelectorAll(".char");
-    if (!chars.length) return;
-    gsap.fromTo(chars, { opacity: 0, y: 50, rotateX: -90 }, {
-      opacity: 1, y: 0, rotateX: 0, stagger: 0.03, duration: 1, ease: "power3.out",
-      scrollTrigger: { trigger: title, start: "top 85%" }
-    });
+  // ====================================================
+  // 1. ANIMAÇÃO DE TÍTULOS (Com SplitType)
+  // ====================================================
+  
+  // 1. Reverter splits anteriores se houver (útil no resize)
+  // Como estamos recriando, vamos garantir que limpamos as classes antigas se necessário
+  document.querySelectorAll('.split-animate .char').forEach(char => {
+      // O SplitType geralmente tem um método .revert(), mas em SPAs simples
+      // as vezes recriar resolve. Vamos instanciar direto.
   });
+
+  // 2. Criar nova instância do SplitType
+  // 'types: "chars"' quebra em caracteres. 
+  // 'tagName: "span"' é o padrão.
+  // Ele preserva a estrutura HTML, então a cor (span.text-serif) continua funcionando!
+  const splitTitle = new SplitType('.split-animate', { types: 'chars, words' });
+
+  // 3. Animar os caracteres gerados (.char)
+  const chars = document.querySelectorAll('.split-animate .char');
+  if (chars.length) {
+    gsap.fromTo(chars, 
+      { opacity: 0, x: -20, stagger: .1, filter: "blur(20px)" },
+        { opacity: 1, x: 0, stagger: .05, duration: 0.6, ease: "power2.out", filter: "blur(0px)", delay: 0.3 }
+    );
+  }
 
   // ====================================================
   // 2. LÓGICA UNIFICADA (FUNDO + SEÇÃO + LOGO AUTO)
   // ====================================================
   const sections = document.querySelectorAll(".project-section");
   const bgs = document.querySelectorAll(".bg-item");
-  
-  // Aumentei para dar bastante tempo de leitura e apreciação
   const PIN_DISTANCE = 4500; 
 
   sections.forEach((section, index) => {
-    const bg = bgs[index]; // O fundo correspondente a esta seção
+    const bg = bgs[index]; 
     const content = section.querySelector(".project-content");
+    const miniNav = section.querySelector(".mini-nav"); // Mini Navbar resgatada
     const logoLayer = section.querySelector(".project-card-media--logo");
     
-    // Se faltar algo, pula
     if (!bg || !content) return;
 
+    // Grupo de conteúdo (Texto + Nav)
+    const contentGroup = [content, miniNav].filter(el => el);
+
     // ESTADO INICIAL
-    // Fundo invisível
     gsap.set(bg, { opacity: 0 });
-    // Conteúdo invisível e para baixo
-    gsap.set(content, { autoAlpha: 0, y: 100 });
-    // Logo visível (cobre a galeria inicialmente)
+    gsap.set(contentGroup, { autoAlpha: 0, y: 100 });
     if(logoLayer) gsap.set(logoLayer, { autoAlpha: 1 });
 
-    // --- TIMELINE MESTRA (Controlada pelo Scroll) ---
-    // Essa timeline cuida do PIN, do FUNDO e da entrada/saída do CONTEÚDO
+    // --- TIMELINE MESTRA ---
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: section,
-        start: "top top",   // Trava no topo
+        start: "top top",
         end: `+=${PIN_DISTANCE}`,
-        pin: true,          // Trava a tela
-        scrub: 0.5,         // Suaviza o scroll
+        pin: true,
+        scrub: 0.5,
         invalidateOnRefresh: true,
         
-        // --- AQUI ESTÁ A MÁGICA "AUTOMÁTICA" DA LOGO ---
-        // Dispara quando a seção entra e trava (Enter)
+        // Logo Automática (Tempo Real)
         onEnter: () => {
            if(logoLayer) {
-             // Animação independente do scroll (Tempo Real)
-             // Espera 0.5s, fica 3s, e desaparece em 1s
              gsap.to(logoLayer, { 
                autoAlpha: 0, 
                duration: 1, 
@@ -82,54 +90,42 @@ export function initHomeAnimations() {
              });
            }
         },
-        // Reseta se o usuário voltar para cima (LeaveBack)
         onLeaveBack: () => {
            if(logoLayer) {
              gsap.to(logoLayer, { autoAlpha: 1, duration: 0.3, overwrite: true });
            }
-        },
-        // Opcional: Resetar se rolar para baixo e voltar (EnterBack)
-        onEnterBack: () => {
-           // Se quiser que a logo apareça de novo ao voltar, descomente:
-           // gsap.to(logoLayer, { autoAlpha: 1, duration: 0.3, overwrite: true });
-           // gsap.to(logoLayer, { autoAlpha: 0, duration: 1, delay: 2, overwrite: true });
         }
       }
     });
 
-    // --- SEQUÊNCIA DO SCROLL (0% a 100%) ---
+    // --- SEQUÊNCIA DO SCROLL ---
 
-    // 1. FUNDO ENTRA (0% -> 10%)
-    // Começa a aparecer assim que trava
+    // 1. FUNDO ENTRA
     tl.to(bg, { opacity: 1, duration: 1, ease: "none" });
 
-    // 2. SCROLL VAZIO INICIAL (10% -> 30%)
-    // Espaço para ver só a imagem de fundo
+    // 2. SCROLL VAZIO (Apreciação)
     tl.to({}, { duration: 1.5 });
 
-    // 3. CONTEÚDO ENTRA (30% -> 40%)
-    tl.to(content, { 
+    // 3. CONTEÚDO ENTRA
+    tl.to(contentGroup, { 
       autoAlpha: 1, 
       y: 0, 
-      duration:0.35, 
+      duration: 0.35, 
       ease: "power2.out" 
     });
 
-    // 4. HOLD / LEITURA (40% -> 85%)
-    // Tempo longo onde o scroll move a barra, mas o conteúdo fica parado.
-    // É AQUI que a animação automática da Logo vai acontecer em paralelo!
+    // 4. HOLD / LEITURA (Tempo longo)
     tl.to({}, { duration: 4.5 });
 
-    // 5. CONTEÚDO SAI (85% -> 95%)
-    // Sai antes do fundo terminar
-    tl.to(content, { 
+    // 5. CONTEÚDO SAI
+    tl.to(contentGroup, { 
       autoAlpha: 0, 
       y: -100, 
       duration: 1, 
       ease: "power2.in" 
     });
 
-    // 6. FUNDO SAI (95% -> 100%)
+    // 6. FUNDO SAI
     tl.to(bg, { opacity: 0, duration: 0.5, ease: "none" });
 
   });
