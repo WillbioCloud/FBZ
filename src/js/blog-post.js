@@ -155,7 +155,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if(window.gsap && window.SplitType) {
     const splitTitle = new SplitType('.split-animate', { types: 'chars, words' });
     window.gsap.from('.split-animate .char', {
-      opacity: 100, x: -20, rotateX: -90, stagger: 0.02, duration: 1, ease: 'power3.out'
+      opacity: 0, x: -20, filter: "blur(10px)", stagger: 0.02, duration: 1, ease: 'power3.out'
     });
     
     window.gsap.from('.reveal-card', {

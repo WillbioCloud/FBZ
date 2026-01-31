@@ -97,9 +97,9 @@ export const FBZ_DATA = {
         slogan: "Vida em harmonia com a natureza.",
         descCurta: "Loteamento com áreas verdes e infraestrutura moderna.",
         heroImg: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80",
-        logo: "/assets/img/logo/LOGO-RESIDENCIAL-PRIMAVER-2.webp",
+        logo: "/assets/img/logo/LOGO-PRIMAVERA-2.webp",
         corHex: "#16a34a",
-        link: "/src/empreendimentos/residencial-primaver-2.html",
+        link: "/src/empreendimentos/residencial-primavera-2.html",
     },
 
     {
@@ -155,7 +155,7 @@ export const FBZ_DATA = {
     },
   ],
 
-  // NOVA SEÇÃO BLOG
+  // --- AQUI ESTÁ A PARTE QUE FALTAVA ---
   blog: [
     {
       id: 1,
@@ -172,6 +172,7 @@ export const FBZ_DATA = {
         <p>Novas obras viárias e a expansão do aeroporto local facilitam o acesso e valorizam os bairros planejados no entorno.</p>
         <p>Se você busca segurança e rentabilidade, um lote em bairro planejado é a porta de entrada mais acessível e segura hoje.</p>
       `,
+      categoria: "Investimento",
       autor: "Equipe FBZ",
       data: "12 Jan, 2026",
       thumb: "https://images.unsplash.com/photo-1585553616435-2dc0a54e271d?q=80",
@@ -226,9 +227,9 @@ export const FBZ_DATA = {
       data: "20 Fev, 2026",
       thumb: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?q=80",
       views: 2100,
-      comments: 25,
+      comments: 34,
       likes: 120,
-      readTime: "6 min"
+      readTime: "8 min"
     }
   ]
 };
