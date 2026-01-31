@@ -18,15 +18,24 @@ html {
   width: 100%;
 }
 
+/* Adicione no topo do src/css/base.css */
 body {
   margin: 0;
   padding: 0;
   min-height: 100vh;
   background-color: var(--bg);
   color: var(--text);
-  font-family: 'Inter', sans-serif;
+  
+  /* Atualizado para usar as fontes novas */
+  font-family: 'Inter', system-ui, sans-serif; 
+  
   overflow-x: hidden;
   position: relative;
+}
+
+h1, h2, h3, h4 {
+  font-family: 'Montserrat', sans-serif;
+  color: #fff;
 }
 
 /* Background Container Fixo */
@@ -77,6 +86,3 @@ body {
   margin: 0 auto;
   padding: 0 var(--px);
 }
-
-h1, h2, h3 { font-family: 'Montserrat', sans-serif; font-weight: 700; }
-.reveal-text { opacity: 0; }
