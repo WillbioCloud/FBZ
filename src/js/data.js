@@ -1,10 +1,12 @@
+// src/js/data.js
+
 export const FBZ_DATA = {
   global: {
     whatsapp: "556193291812",
     whatsappDefaultMsg: "Olá! Vim pelo site da FBZ e gostaria de informações.",
   },
 
-  // Ordenado do mais novo para o mais antigo (ano desc)
+  // Mantendo a SUA sequência original (do mais novo para o mais antigo)
   empreendimentos: [
     {
       slug: "reserva-da-mata",
@@ -18,23 +20,19 @@ export const FBZ_DATA = {
       corHex: "#16a34a",
       link: "/src/empreendimentos/reserva-da-mata.html",
     },
-
+    
+    // --- NOVO ITEM ADICIONADO AQUI (2025 - Lago) ---
     {
-      slug: "cidade-inteligente",
-      ano: 2024,
-      nome: "Cidade Inteligente",
-      status: "Em Obras",
-      slogan: "Urbanismo moderno com tecnologia.",
-      descCurta: "Infraestrutura tecnológica e monitoramento 24h.",
-      heroImg: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80",
+      slug: "cidade-inteligente-lago",
+      ano: 2025,
+      nome: "Cidade Inteligente - Etapa Lago",
+      status: "Lançamento",
+      slogan: "A expansão premium.",
+      descCurta: "Segunda etapa com vista exclusiva para o lago.",
+      heroImg: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80", // Trocar por foto de lago
       logo: "/assets/img/logo/LOGO-CIDADE-INTELIGENTE.webp",
       corHex: "#0284c7",
       link: "/src/empreendimentos/cidade-inteligente.html",
-
-      // ✅ Ajustes conforme você informou
-      entregaPrevistaAno: 2028,
-      observacao:
-        "Lotes vendidos antes da conclusão da infraestrutura. Empreendimento em construção com previsão de entrega em 2028.",
     },
 
     {
@@ -51,6 +49,22 @@ export const FBZ_DATA = {
     },
 
     {
+      slug: "cidade-inteligente",
+      ano: 2024,
+      nome: "Cidade Inteligente - Fase 1",
+      status: "Em Obras",
+      slogan: "Urbanismo moderno com tecnologia.",
+      descCurta: "Infraestrutura tecnológica e monitoramento 24h.",
+      heroVideo: "https://www.fbz.com.br/assets/video/cidade-inteligente-hero.mp4",
+      heroImg: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80",
+      logo: "/assets/img/logo/LOGO-CIDADE-INTELIGENTE.webp",
+      corHex: "#0284c7",
+      link: "/src/empreendimentos/cidade-inteligente.html",
+      entregaPrevistaAno: 2028,
+      observacao: "Lotes vendidos antes da conclusão da infraestrutura.",
+    },
+
+    {
       slug: "cidade-universitaria",
       ano: 2023,
       nome: "Cidade Universitária",
@@ -61,6 +75,19 @@ export const FBZ_DATA = {
       logo: "/assets/img/logo/LOGO-CIDADE-UNIVERSITARIA.webp",
       corHex: "#4338ca",
       link: "/src/empreendimentos/cidade-universitaria.html",
+    },
+
+    {
+      slug: "cidade-verde",
+      ano: 2022,
+      nome: "Cidade Verde",
+      status: "Disponível",
+      slogan: "Vida ao ar livre com estrutura.",
+      descCurta: "Projeto com foco em áreas verdes e organização urbana.",
+      heroImg: "https://images.unsplash.com/photo-1628744448839-4458d5789f2a?q=80",
+      logo: "/assets/img/logo/LOGO-CIDADE-VERDE.webp",
+      corHex: "#15803d",
+      link: "/src/empreendimentos/cidade-verde.html",
     },
 
     {
@@ -77,19 +104,6 @@ export const FBZ_DATA = {
     },
 
     {
-      slug: "cidade-verde",
-      ano: 2021,
-      nome: "Cidade Verde",
-      status: "Disponível",
-      slogan: "Vida ao ar livre com estrutura.",
-      descCurta: "Projeto com foco em áreas verdes e organização urbana.",
-      heroImg: "https://images.unsplash.com/photo-1628744448839-4458d5789f2a?q=80",
-      logo: "/assets/img/logo/LOGO-CIDADE-VERDE.webp",
-      corHex: "#15803d",
-      link: "/src/empreendimentos/cidade-verde.html",
-    },
-
-    {
         slug: "residencial-primaver-2",
         ano: 2020,
         nome: "Residencial Primavera 2",
@@ -97,9 +111,9 @@ export const FBZ_DATA = {
         slogan: "Vida em harmonia com a natureza.",
         descCurta: "Loteamento com áreas verdes e infraestrutura moderna.",
         heroImg: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80",
-        logo: "/assets/img/logo/LOGO-PRIMAVERA-2.webp",
+        logo: "/assets/img/logo/LOGO-RESIDENCIAL-PRIMAVER-2.webp",
         corHex: "#16a34a",
-        link: "/src/empreendimentos/residencial-primavera-2.html",
+        link: "/src/empreendimentos/residencial-primaver-2.html",
     },
 
     {
@@ -153,9 +167,21 @@ export const FBZ_DATA = {
       corHex: "#18a1b9",
       link: "#",
     },
+    {
+      slug: "Santa-Clara",
+      ano: 2012,
+      nome: "Santa Clara",
+      status: "Entregue",
+      slogan: "Vida em harmonia.",
+      descCurta: "Loteamento com infraestrutura completa e localização privilegiada.",
+      heroImg: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80",
+      logo: "/assets/img/logo/LOGO-SANTA-CLARA.webp",
+      corHex: "#c2410c",
+      link: "/src/empreendimentos/santa-clara.html",
+    }
   ],
 
-  // --- AQUI ESTÁ A PARTE QUE FALTAVA ---
+  // --- AQUI ESTÁ A PARTE QUE FALTAVA - O BLOG ---
   blog: [
     {
       id: 1,

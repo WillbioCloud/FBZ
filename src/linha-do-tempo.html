@@ -5,15 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Nossa Trajetória | FBZ Construtora</title>
 
-    <meta
-      name="description"
-      content="Linha do tempo da FBZ Construtora: lançamentos, entregas e projetos em Caldas Novas (GO)."
-    />
-
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Montserrat:wght@400;700;800&family=Playfair+Display:ital,wght@0,600;1,600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Montserrat:wght@400;700;900&display=swap"
       rel="stylesheet"
     />
 
@@ -21,307 +16,429 @@
     <link rel="stylesheet" href="/src/css/components.css" />
 
     <style>
-      /* =========================
-         CSS Específico da Linha do Tempo
-      ========================= */
+      body { background-color: #050505; color: #fff; overflow-x: hidden; }
 
-      .timeline-wrap {
-        padding-top: 90px; /* folga por causa da nav fixa */
-      }
-
-      .timeline-container {
+      /* HERO */
+      .page-hero {
+        height: 100vh;
+        display: flex; flex-direction: column;
+        align-items: center; justify-content: center;
         position: relative;
-        max-width: 1000px;
-        margin: 0 auto;
-        padding: 40px 20px;
-      }
-
-      /* A Linha Central */
-      .timeline-line {
-        position: absolute;
-        left: 50%;
-        top: 0;
-        bottom: 0;
-        width: 2px;
-        background: linear-gradient(
-          to bottom,
-          transparent,
-          var(--accent),
-          var(--accent),
-          transparent
-        );
-        transform: translateX(-50%) scaleY(0);
-        transform-origin: top;
-      }
-
-      /* Item */
-      .timeline-item {
-        display: flex;
-        justify-content: center;
-        padding-bottom: 80px;
-        opacity: 0; /* começa invisível pro GSAP */
-        position: relative;
-      }
-
-      .timeline-content {
-        width: 45%;
-        position: relative;
-      }
-
-      /* Alternância (Esquerda/Direita) */
-      .timeline-item:nth-child(odd) {
-        justify-content: flex-start;
-      }
-      .timeline-item:nth-child(even) {
-        justify-content: flex-end;
-      }
-
-      .timeline-item:nth-child(odd) .timeline-content {
-        text-align: right;
-        padding-right: 40px;
-      }
-      .timeline-item:nth-child(even) .timeline-content {
-        text-align: left;
-        padding-left: 40px;
-      }
-
-      /* Ponto (bolinha) */
-      .timeline-dot {
-        position: absolute;
-        top: 20px;
-        left: 50%;
-        width: 16px;
-        height: 16px;
-        background: var(--bg);
-        border: 2px solid var(--accent);
-        border-radius: 50%;
-        transform: translateX(-50%);
+        background-image: url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80');
+        background-size: cover; background-position: center;
         z-index: 10;
-        box-shadow: 0 0 15px rgba(42, 209, 122, 0.5);
+      }
+      .page-hero::before {
+        content:''; position:absolute; inset:0;
+        background: radial-gradient(circle, rgba(0,0,0,0.3) 0%, #050505 100%);
+      }
+      .hero-title-big {
+        position: relative; z-index: 2;
+        font-family: 'Montserrat', sans-serif;
+        font-size: clamp(4rem, 12vw, 15rem);
+        font-weight: 900; color: transparent;
+        -webkit-text-stroke: 2px #fff; text-transform: uppercase; line-height: 0.8;
       }
 
-      /* Ano gigante */
-      .timeline-year {
-        font-size: 5rem;
-        font-weight: 800;
-        color: rgba(255, 255, 255, 0.06);
-        position: absolute;
-        top: -44px;
-        line-height: 1;
-        font-family: "Playfair Display", serif;
-        z-index: 0;
-        pointer-events: none;
-      }
-
-      .timeline-item:nth-child(odd) .timeline-year {
-        right: 20px;
-      }
-      .timeline-item:nth-child(even) .timeline-year {
-        left: 20px;
-      }
-
-      /* Card */
-      .t-card {
-        display: block;
-        background: rgba(255, 255, 255, 0.03);
-        border: 1px solid var(--border);
-        border-radius: var(--radius);
+      /* SEÇÃO HORIZONTAL */
+      .horizontal-section {
+        width: 100%;
+        height: 100vh;
         overflow: hidden;
         position: relative;
-        z-index: 1;
-        transition: transform 0.3s, border-color 0.3s;
-        text-decoration: none;
+        background: #050505;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
       }
 
-      .t-card:hover {
+      .svg-layer, .horizontal-wrapper, .dots-layer {
+        position: absolute;
+        transform: scale(0.9);
+        top: 0; left: 0; height: 100%;
+        transform-origin: center center;
+        will-change: transform;
+      }
+      .svg-layer { pointer-events: none; z-index: 1; }
+      .dots-layer { pointer-events: none; z-index: 2; }
+      .horizontal-wrapper { z-index: 5; }
+
+      #zigzag-path { fill: none; stroke: rgba(255, 255, 255, 0.1); stroke-width: 4px; }
+      #zigzag-tracer {
+        fill: none; stroke: var(--accent); stroke-width: 8px;
+        stroke-linecap: round; filter: drop-shadow(0 0 15px var(--accent));
+      }
+
+      .track-dot {
+        position: absolute;
+        width: 14px; height: 14px;
+        background: #222;
+        border: 2px solid #555;
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+      }
+
+      .head-dot {
+        width: 24px; height: 24px;
+        background: #fff;
+        border: 4px solid var(--accent);
+        box-shadow: 0 0 30px var(--accent), 0 0 60px #fff;
+        border-radius: 50%;
+        position: absolute; top: 0; left: 0;
+        z-index: 10;
+        transform: translate(-50%, -50%);
+      }
+
+      /* CARD */
+      .h-card {
+        position: absolute;
+        width: 520px;
+        height: 280px;
+        background: rgba(10, 10, 10, 0.95);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(20px);
+        display: flex;
+        overflow: visible;
+        box-shadow: 0 30px 80px rgba(0,0,0,0.8);
+        cursor: pointer;
+        transform-origin: center center;
+        transition: transform 0.3s ease, border-color 0.3s ease, filter 0.3s ease, opacity 0.3s ease;
+      }
+      .h-card:hover {
         border-color: var(--accent);
-        transform: translateY(-4px) scale(1.01);
+        z-index: 100 !important;
+        transform: scale(1.1) !important;
+        filter: none !important;
+        opacity: 1 !important;
       }
 
-      .t-img {
-        height: 200px;
-        width: 100%;
+      .h-card-img {
+        width: 45%; height: 100%;
         object-fit: cover;
+        border-radius: 24px 0 0 24px;
+        overflow: hidden;
+      }
+      .h-card-body {
+        width: 55%;
+        padding: 25px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        position: relative;
       }
 
-      .t-body {
-        padding: 20px;
+      .h-ano {
+        position: absolute;
+        top: 25px;    /* Distância do topo */
+        right: 45px;  /* Distância da direita (use 'left' se quiser no outro canto) */
+        font-size: 2rem;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 600;
+        margin-bottom: 0; /* Remova o margin para não deslocar o posicionamento */
+        color: var(--accent);
       }
 
-      .t-body h3 {
-        margin: 0 0 6px 0;
-        font-size: 1.35rem;
+      /* ANO FLUTUANDO (sempre começa invisível e só aparece no zoom final) */
+      .h-year {
+        position: absolute;
+        top: -120px; left: 50%;
+        transform: translateX(-50%);
+        font-family: 'Montserrat', sans-serif;
+        font-size: 8rem;
+        font-weight: 900;
+        color: #fff;
+        text-shadow: 0 0 30px rgba(42, 209, 122, 0.5);
+        pointer-events: none;
+        z-index: 200;
+        line-height: 1;
+        opacity: 0;
+      }
+
+      .h-title {
+        font-size: 1.4rem;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 700;
+        margin: 5px 0 10px;
+        line-height: 1.1;
         color: #fff;
       }
-
-      .t-body p {
-        margin: 0;
-        font-size: 0.95rem;
-        opacity: 0.85;
+      .h-desc { font-size: 0.85rem; color: #aaa; line-height: 1.5; }
+      .h-badge {
+        align-self: flex-start;
+        padding: 4px 10px;
+        border-radius: 6px;
+        background: rgba(42, 209, 122, 0.15);
+        color: var(--accent);
+        font-size: 0.7rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        border: 1px solid rgba(42, 209, 122, 0.2);
+      }
+      .click-hint {
+        font-size: 0.65rem;
+        color: var(--accent);
+        margin-top: 15px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        opacity: 0.8;
       }
 
-      /* Mobile */
-      @media (max-width: 768px) {
-        .timeline-line {
-          left: 20px;
-          transform: translateX(0) scaleY(0);
-        }
+      /* MARCADORES (INÍCIO E FIM) */
+      .future-marker, .start-marker {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+        z-index: 200;
+        opacity: 0;
+        pointer-events: auto;
+        transform-origin: center center;
+      }
 
-        .timeline-item {
-          justify-content: flex-start !important;
-          padding-left: 40px;
-        }
+      .future-text, .start-text {
+        font-family: 'Montserrat', sans-serif;
+        font-size: 2.5rem;
+        font-weight: 900;
+        color: #fff;
+        text-transform: uppercase;
+        white-space: nowrap;
+        text-align: center;
+        text-shadow: 0 0 50px rgba(255, 255, 255, 0.5);
+      }
 
-        .timeline-item:nth-child(odd) .timeline-content,
-        .timeline-item:nth-child(even) .timeline-content {
-          text-align: left;
-          padding-left: 10px;
-          padding-right: 0;
-          width: 100%;
-        }
+      .future-icon, .start-icon {
+        width: 80px; height: 80px;
+        border: 4px solid #fff;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #000;
+        box-shadow: 0 0 0 rgba(255,255,255,0);
+        transition: all 0.3s;
+        overflow: hidden;
+      }
+      .start-icon img { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; }
 
-        .timeline-dot {
-          left: 20px;
-          transform: translateX(-50%);
-        }
+      .future-marker:hover .future-icon {
+        background: var(--accent);
+        border-color: var(--accent);
+        box-shadow: 0 0 50px var(--accent);
+      }
 
-        .timeline-year {
-          font-size: 3rem;
-          top: -26px;
-          left: 10px !important;
-          right: auto !important;
-        }
+      /* MENSAGEM OCULTA */
+      .future-hidden-msg {
+        position: absolute;
+        top: 120px;
+        width: 400px;
+        text-align: center;
+        font-family: 'Inter', sans-serif;
+        font-size: 1.2rem;
+        color: #ccc;
+        opacity: 0;
+        transform: translateY(20px);
+        pointer-events: none;
+        background: rgba(0,0,0,0.95);
+        padding: 25px;
+        border-radius: 20px;
+        border: 1px solid rgba(42, 209, 122, 0.3);
+        box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+      }
+
+      /* MODAL */
+      .project-modal {
+        position: fixed; inset: 0;
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.4s;
+      }
+      .project-modal.is-open { opacity: 1; pointer-events: auto; }
+      .modal-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.9); backdrop-filter: blur(10px); }
+      .modal-content {
+        position: relative;
+        width: 90%;
+        max-width: 900px;
+        background: #111;
+        border: 1px solid #333;
+        border-radius: 30px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        transform: scale(0.95);
+        transition: transform 0.4s;
+      }
+      .project-modal.is-open .modal-content { transform: scale(1); }
+      .modal-header { height: 250px; position: relative; }
+      .modal-hero-img { width: 100%; height: 100%; object-fit: cover; }
+      .modal-close {
+        position: absolute;
+        top: 20px; right: 20px;
+        width: 40px; height: 40px;
+        border-radius: 50%;
+        background: rgba(0,0,0,0.5);
+        border: 1px solid #fff;
+        color: #fff;
+        font-size: 1.5rem;
+        cursor: pointer;
+        z-index: 10;
+      }
+      .modal-body { padding: 40px; background: #111; }
+      .modal-btn {
+        display: inline-block;
+        padding: 15px 30px;
+        background: var(--accent);
+        color: #000;
+        font-weight: 800;
+        text-decoration: none;
+        border-radius: 50px;
+        text-transform: uppercase;
+        margin-top: 20px;
+      }
+      @media (min-width: 768px) {
+        .modal-content { flex-direction: row; height: 500px; }
+        .modal-header { width: 50%; height: 100%; }
+        .modal-body { width: 50%; overflow-y: auto; }
       }
     </style>
   </head>
 
   <body>
-    <nav class="nav" aria-label="Navegação principal">
+    <nav class="nav">
       <div class="container nav__inner">
-        <a href="/" class="brand" aria-label="FBZ Construtora">
-          FBZ<span class="brand-dot">.</span>
-        </a>
-
+        <a href="/" class="brand">FBZ<span class="brand-dot">.</span></a>
         <div class="nav__links">
-          <a href="/">Home</a>
-          <a href="/#vitrine">Empreendimentos</a>
+          <div class="nav-item-dropdown">
+            <a href="/#vitrine" style="padding: 20px 0;">Empreendimentos ▾</a>
+            <div id="navProjectsList" class="dropdown-menu"></div>
+          </div>
+          <a href="/src/blog.html">Blog</a>
+          <a href="/src/linha-do-tempo.html">Nossa História</a>
         </div>
-
-        <a
-          id="navWhats"
-          href="https://wa.me/556193291812"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="btn btn--primary"
-        >
-          WhatsApp
-        </a>
       </div>
     </nav>
 
-    <main class="timeline-wrap">
-      <header class="section" style="padding-bottom: 0;">
-        <div class="container" style="text-align: center;">
-          <span class="eyebrow">Nossa História</span>
-          <h1 class="reveal-text">Construindo o Futuro</h1>
-          <p class="lead reveal-text">
-            Uma trajetória de inovação e compromisso com Caldas Novas.
-          </p>
-        </div>
-      </header>
+    <header class="page-hero">
+      <div class="page-hero__content">
+        <h1 class="hero-title-big">Nossa<br />Trajetória</h1>
+      </div>
+    </header>
 
-      <section class="section">
-        <div class="container">
-          <div class="timeline-container" id="timelineWrapper">
-            <div class="timeline-line"></div>
-            <!-- itens entram aqui via JS -->
+    <section class="horizontal-section">
+      <div class="svg-layer">
+        <svg style="width: 100%; height: 100%; overflow: visible;">
+          <path id="zigzag-path" d="" />
+          <path id="zigzag-tracer" d="" />
+        </svg>
+        <div class="head-dot"></div>
+      </div>
+
+      <div class="dots-layer"></div>
+
+      <div class="horizontal-wrapper" id="timelineWrapper">
+        <div class="start-marker" id="startMarker">
+          <div class="start-text" style="font-size: 1.5rem; margin-bottom: 10px;">2007</div>
+          <div class="start-icon">
+            <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80" alt="Início" />
+          </div>
+          <div
+            class="start-text"
+            style="font-size: 1rem; margin-top: 10px; max-width: 250px; line-height: 1.4; color: #ccc; text-transform: none;"
+          >
+            Construção da primeira casa.
           </div>
         </div>
-      </section>
-    </main>
 
-    <footer class="footer">
+        <div class="future-marker" id="todayMarker">
+          <div class="future-icon">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="6" y="6" width="12" height="12"></rect>
+            </svg>
+          </div>
+          <div class="future-text">Hoje</div>
+
+          <div class="future-hidden-msg">
+            <h3 style="color: var(--accent); margin-bottom: 8px;">O Futuro em Desenvolvimento</h3>
+            <p>Novos projetos grandiosos estão sendo desenhados para o futuro de Caldas Novas. Aguarde!</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer" style="background: #000; padding: 100px 0;">
       <div class="container" style="text-align: center;">
+        <h2 style="font-size: 2.5rem; margin-bottom: 20px;">O Legado Continua</h2>
         <p>© 2026 FBZ Construtora.</p>
       </div>
     </footer>
 
-    <!-- GSAP (CDN) -->
+    <div class="project-modal" id="projectModal">
+      <div class="modal-backdrop" id="modalBackdrop"></div>
+      <div class="modal-content">
+        <button class="modal-close" id="modalClose">&times;</button>
+        <div class="modal-header">
+          <img src="" class="modal-hero-img" id="modalImg" />
+        </div>
+        <div class="modal-body">
+          <span style="color: var(--accent); font-weight: bold;" id="modalYear"></span>
+          <h2 class="modal-title" id="modalTitle"></h2>
+          <p class="modal-desc" id="modalDesc"></p>
+          <a href="#" class="modal-btn" id="modalLink">Ver Detalhes</a>
+        </div>
+      </div>
+    </div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/MotionPathPlugin.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/CustomEase.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/split-type@0.3.4/umd/index.min.js"></script>
 
-    <!-- Timeline render (Module) -->
     <script type="module">
+      import { initTimelineAnimations } from "/src/js/animation-timeline.js";
       import { FBZ_DATA } from "/src/js/data.js";
 
+      const nav = document.getElementById("navProjectsList");
+      if (nav && FBZ_DATA.empreendimentos) {
+        nav.innerHTML = FBZ_DATA.empreendimentos
+          .map((e) => `<a href="/index.html#${e.slug}" class="dropdown-item">${e.nome}</a>`)
+          .join("");
+      }
+
       const wrapper = document.getElementById("timelineWrapper");
-      if (!wrapper || !FBZ_DATA?.empreendimentos?.length) {
-        console.warn("Timeline: wrapper ou dados não encontrados.");
-      } else {
-        // Ordena por ano (crescente) e só pega os que têm ano
+      if (wrapper && FBZ_DATA.empreendimentos) {
         const sorted = [...FBZ_DATA.empreendimentos]
           .filter((e) => !!e.ano)
           .sort((a, b) => a.ano - b.ano);
 
         sorted.forEach((emp) => {
           const html = `
-            <div class="timeline-item reveal-timeline">
-              <div class="timeline-dot"></div>
-              <div class="timeline-content">
-                <span class="timeline-year">${emp.ano}</span>
-
-                <a href="${emp.link || "#"}" class="t-card">
-                  <img src="${emp.heroImg}" class="t-img" alt="${emp.nome}">
-                  <div class="t-body">
-                    <div style="margin-bottom:10px;">
-                      <span class="badge" style="font-size:0.72rem;">${emp.status || "Disponível"}</span>
-                    </div>
-                    <h3>${emp.nome || ""}</h3>
-                    <p>${emp.descCurta || ""}</p>
-                  </div>
-                </a>
+            <article class="h-card"
+              data-nome="${emp.nome}"
+              data-ano="${emp.ano}"
+              data-desc="${emp.descCurta}"
+              data-img="${emp.heroImg}"
+              data-link="${emp.link || '#'}"
+            >
+              <span class="h-year">${emp.ano}</span>
+              <img src="${emp.heroImg}" class="h-card-img" loading="lazy" />
+              <div class="h-card-body">
+                <span class="h-badge">${emp.status || "Entregue"}</span>
+                <h3 class="h-title">${emp.nome}</h3>
+                <p class="h-desc">${emp.descCurta}</p>
+                <h4 class="h-ano">${emp.ano}</h4>
+                <span class="click-hint">+ Clique para expandir</span>
               </div>
-            </div>
+            </article>
           `;
           wrapper.insertAdjacentHTML("beforeend", html);
         });
 
-        // Animações GSAP
-        if (window.gsap && window.ScrollTrigger) {
-          gsap.registerPlugin(ScrollTrigger);
-
-          // Linha descendo
-          gsap.to(".timeline-line", {
-            scaleY: 1,
-            ease: "none",
-            scrollTrigger: {
-              trigger: ".timeline-container",
-              start: "top 70%",
-              end: "bottom 85%",
-              scrub: 1,
-            },
-          });
-
-          // Cards entrando alternando lado
-          gsap.utils.toArray(".reveal-timeline").forEach((item, i) => {
-            const xVal = i % 2 === 0 ? -60 : 60;
-
-            gsap.fromTo(
-              item,
-              { opacity: 0, x: xVal },
-              {
-                opacity: 1,
-                x: 0,
-                duration: 0.9,
-                ease: "power3.out",
-                scrollTrigger: {
-                  trigger: item,
-                  start: "top 82%",
-                },
-              }
-            );
-          });
-        }
+        setTimeout(() => initTimelineAnimations(), 120);
       }
     </script>
   </body>
