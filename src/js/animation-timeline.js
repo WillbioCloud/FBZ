@@ -133,8 +133,8 @@ export function initTimelineAnimations() {
       // Curva Suave (S-Curve)
       const prevX = lastX;
       const prevY = lastY;
-      const cp1x = prevX + (gap * 0.5); const cp1y = prevY;
-      const cp2x = cx - (gap * 0.5); const cp2y = cy;
+      const cp1x = prevX + (gap * 0.4); const cp1y = prevY;
+      const cp2x = cx - (gap * 0.4); const cp2y = cy;
 
       d += `C ${cp1x},${cp1y} ${cp2x},${cp2y} ${cx},${cy} `;
       stops.push(cx / totalWidth);
@@ -234,7 +234,7 @@ export function initTimelineAnimations() {
         0.5
       );
       // Some quando a cobra avança
-      masterTl.to(startMarker, { scale: 0.5, opacity: 0, duration: 2 }, 4);
+      masterTl.to(startMarker, { scale: 0.5, opacity: 0, duration: 0.2 }, 4);
     }
 
     // --- 4. ZOOM OUT ---
@@ -257,8 +257,8 @@ export function initTimelineAnimations() {
     if(futureMarker) {
       const inverseScale = 1 / finalScale;
       masterTl.to(futureMarker, {
-        opacity: 1, scale: inverseScale * 0.3, duration: 1, ease: "elastic.out(1, 0.3)"
-      }, zoomStart + 1);
+        opacity: 1, scale: inverseScale * 0.2, duration: 1, ease: "elastic.out(1, 0.3)"
+      }, zoomStart + 0.5);
     }
     
     // REVELA O START MARKER NOVAMENTE NO MAPA FINAL
@@ -304,17 +304,17 @@ function initFutureClick() {
   const msg = marker.querySelector(".future-hidden-msg");
   const icon = marker.querySelector(".future-icon");
   const text = marker.querySelector(".future-text");
-  let isOpen = false;
+  
+  // Criamos a timeline pausada para controlar o estado
+  const tl = window.gsap.timeline({ paused: true, reversed: true });
+
+  tl.to(text, { opacity: 0, y: -20, duration: 0.3 })
+    .to(icon, { rotation: 90, scale: 1.5, borderColor: "var(--accent)", backgroundColor:"var(--accent)", color:"#000", duration: 0.5 }, 0)
+    .to(msg, { opacity: 1, y: 0, scale: 1, duration: 0.6, ease: "back.out(1.7)" }, 0.2);
 
   marker.addEventListener("click", () => {
-    if (isOpen) return;
-    isOpen = true;
-    const tl = window.gsap.timeline();
-    tl.to(text, { opacity: 0, y: -20, duration: 0.3 });
-    tl.to(icon, { rotation: 90, scale: 1.5, borderColor: "var(--accent)", backgroundColor:"var(--accent)", color:"#000", duration: 0.5 }, 0);
-    if (msg) {
-      tl.to(msg, { opacity: 1, y: 0, scale: 1, duration: 0.6, ease: "back.out(1.7)" }, 0.2);
-    }
+    // Se estiver no início ou revertendo, dá play. Se não, reverte.
+    tl.reversed() ? tl.play() : tl.reverse();
   });
 }
 

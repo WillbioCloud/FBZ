@@ -1,5 +1,7 @@
 // src/js/app.js
 import { FBZ_DATA } from "./data.js";
+import { BLOG_DATA } from "./data-blog.js"; // Importa Blog separado
+import { initHomeAnimations } from "./animation.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   // Inicializa Plugin GSAP se disponível
@@ -223,13 +225,13 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // --- BLOG HOME (Mantido) ---
-  if (homeBlogContainer && FBZ_DATA.blog) {
-    const latestPosts = FBZ_DATA.blog.slice(0, 3);
+  if (blogGrid && BLOG_DATA) {
+    const recentPosts = BLOG_DATA.slice(0, 3);
     const iconEye = `<svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>`;
     const iconMsg = `<svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>`;
     const iconClock = `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>`;
 
-    homeBlogContainer.innerHTML = latestPosts.map(post => `
+    homeBlogContainer.innerHTML = recentPosts.map(post => `
       <a href="/src/blog-post.html?slug=${post.slug}" class="blog-card reveal-card" style="text-decoration:none; color:inherit;">
         <img src="${post.thumb}" alt="${post.titulo}" class="blog-thumb" loading="lazy">
         <div class="blog-body">

@@ -36,8 +36,7 @@
         position: relative; z-index: 2;
         font-family: 'Montserrat', sans-serif;
         font-size: clamp(4rem, 12vw, 15rem);
-        font-weight: 900; color: transparent;
-        -webkit-text-stroke: 2px #fff; text-transform: uppercase; line-height: 0.8;
+        font-weight: 900;
       }
 
       /* SEÇÃO HORIZONTAL */
@@ -54,7 +53,7 @@
 
       .svg-layer, .horizontal-wrapper, .dots-layer {
         position: absolute;
-        transform: scale(0.9);
+        transform: scale(0.94);
         top: 0; left: 0; height: 100%;
         transform-origin: center center;
         will-change: transform;
@@ -313,7 +312,7 @@
         <a href="/" class="brand">FBZ<span class="brand-dot">.</span></a>
         <div class="nav__links">
           <div class="nav-item-dropdown">
-            <a href="/#vitrine" style="padding: 20px 0;">Empreendimentos ▾</a>
+            <a href="/#vitrine" style="padding: 20px 0;">timeline ▾</a>
             <div id="navProjectsList" class="dropdown-menu"></div>
           </div>
           <a href="/src/blog.html">Blog</a>
@@ -403,15 +402,15 @@
       import { FBZ_DATA } from "/src/js/data.js";
 
       const nav = document.getElementById("navProjectsList");
-      if (nav && FBZ_DATA.empreendimentos) {
-        nav.innerHTML = FBZ_DATA.empreendimentos
+      if (nav && FBZ_DATA.timeline) {
+        nav.innerHTML = FBZ_DATA.timeline
           .map((e) => `<a href="/index.html#${e.slug}" class="dropdown-item">${e.nome}</a>`)
           .join("");
       }
 
       const wrapper = document.getElementById("timelineWrapper");
-      if (wrapper && FBZ_DATA.empreendimentos) {
-        const sorted = [...FBZ_DATA.empreendimentos]
+      if (wrapper && FBZ_DATA.timeline) {
+        const sorted = [...FBZ_DATA.timeline]
           .filter((e) => !!e.ano)
           .sort((a, b) => a.ano - b.ano);
 
@@ -422,12 +421,13 @@
               data-ano="${emp.ano}"
               data-desc="${emp.descCurta}"
               data-img="${emp.heroImg}"
+              data-status="${emp.status || 'Início'}"
               data-link="${emp.link || '#'}"
             >
               <span class="h-year">${emp.ano}</span>
               <img src="${emp.heroImg}" class="h-card-img" loading="lazy" />
               <div class="h-card-body">
-                <span class="h-badge">${emp.status || "Entregue"}</span>
+                <span class="h-badge">${emp.status || "Início"}</span>
                 <h3 class="h-title">${emp.nome}</h3>
                 <p class="h-desc">${emp.descCurta}</p>
                 <h4 class="h-ano">${emp.ano}</h4>
