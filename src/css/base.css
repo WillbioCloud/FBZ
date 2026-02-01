@@ -228,3 +228,23 @@ video {
   object-fit: cover;
   display: block;
 }
+
+/* src/css/base.css */
+
+/* --- SWUP TRANSITIONS --- */
+.transition-fade {
+  transition: opacity 0.4s ease-in-out, transform 0.4s ease;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Quando a página está saindo */
+html.is-changing .transition-fade {
+  opacity: 0;
+  transform: translateY(15px);
+}
+
+/* Estado de carregamento (opcional) */
+html.is-animating {
+  cursor: wait;
+}
