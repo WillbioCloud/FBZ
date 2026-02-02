@@ -83,10 +83,10 @@ export const FBZ_DATA = {
       status: "Disponível",
       slogan: "Vida ao ar livre com estrutura.",
       descCurta: "Projeto com foco em áreas verdes e organização urbana.",
-      heroImg: "https://images.unsplash.com/photo-1628744448839-4458d5789f2a?q=80",
+      heroImg: "https://res.cloudinary.com/dxplpg36m/image/upload/v1769993855/WhatsApp_Image_2026-02-01_at_19.24.12_svdhyy.jpg",
       logo: "/assets/img/logo/LOGO-CIDADE-VERDE.webp",
       corHex: "#15803d",
-      link: "/src/empreendimentos/cidade-verde.html",
+      link: "https://res.cloudinary.com/dxplpg36m/image/upload/v1769993855/WhatsApp_Image_2026-02-01_at_19.24.12_svdhyy.jpg",
     },
 
     {
@@ -96,10 +96,19 @@ export const FBZ_DATA = {
       status: "Disponível",
       slogan: "Beleza e tranquilidade.",
       descCurta: "Ambiente florido e tranquilo.",
-      heroImg: "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?q=80",
+      heroImg: "https://res.cloudinary.com/dxplpg36m/image/upload/v1770046062/cidade_das_flores_t2rouu.webp",
       logo: "/assets/img/logo/LOGO-CIDADE-DAS-FLORES.webp",
       corHex: "#b90000",
       link: "/src/empreendimentos/cidade-das-flores.html",
+      gallery: [
+        "https://res.cloudinary.com/dxplpg36m/image/upload/v1770046276/unnamed_2_sdta8s.webp",
+        "https://res.cloudinary.com/dxplpg36m/image/upload/v1770046284/unnamed_cbrwc0.webp",
+        "https://res.cloudinary.com/dxplpg36m/image/upload/v1770046279/unnamed_7_w5rcnk.webp",
+        "https://res.cloudinary.com/dxplpg36m/image/upload/v1770046275/unnamed_5_c2mp8v.webp",
+        "https://res.cloudinary.com/dxplpg36m/image/upload/v1770046274/unnamed_8_antmjz.webp",
+        "https://res.cloudinary.com/dxplpg36m/image/upload/v1770046273/unnamed_9_oaqs8f.webp",
+        "https://res.cloudinary.com/dxplpg36m/image/upload/v1770046278/unnamed_10_xol6ap.webp",
+      ]
     },
 
     {
