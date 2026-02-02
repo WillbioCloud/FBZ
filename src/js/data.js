@@ -274,11 +274,19 @@ export const FBZ_DATA = {
     },
     {
       ano: 2021,
-      nome: "Cidade das Flores",
-      descCurta: "O jardim urbano. Lançamento do nosso primeiro condomínio fechado de alto padrão. Segurança, paisagismo e sofisticação em harmonia.",
+      nome: "Cidade Verde",
+      descCurta: "O verde que transforma. Lançamento do Cidade Verde, um projeto que prioriza áreas verdes, sustentabilidade e segurança, em parceria com o estado de Goiás decidimos doar o 26º Batalhão da Polícia Militar.",
+      heroImg: "https://res.cloudinary.com/dxplpg36m/image/upload/v1769993855/WhatsApp_Image_2026-02-01_at_19.24.12_svdhyy.jpg",
+      status: "Alto Padrão",
+      link: "/src/empreendimentos/cidade-verde.html"
+    },
+    {
+      ano: 2021,
+      nome: "Cidade Verde 2ª Etapa",
+      descCurta: "Expansão do verde. Devido ao sucesso estrondoso da primeira fase, lançamos a segunda etapa do Cidade Verde, mantendo o compromisso com sustentabilidade e qualidade de vida.",
       heroImg: "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?q=80",
       status: "Alto Padrão",
-      link: "/src/empreendimentos/cidade-das-flores.html"
+      link: "/src/empreendimentos/cidade-verde.html"
     },
     {
       ano: 2021,

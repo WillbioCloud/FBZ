@@ -170,7 +170,7 @@ export function initTimelineAnimations() {
       scrollTrigger: {
         trigger: ".horizontal-section",
         start: "top top",
-        end: () => `+=${totalWidth * 3}`, 
+        end: () => `+=${totalWidth * 2.2}`, 
         pin: true,
         scrub: 1.5, 
         invalidateOnRefresh: true,
