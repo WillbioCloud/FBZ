@@ -1,159 +1,143 @@
 // src/js/animation.js
 
 export function initHomeAnimations() {
-  // Verifica dependências
-  if (!window.gsap || !window.ScrollTrigger || !window.SplitType) {
-    console.warn("GSAP, ScrollTrigger ou SplitType não encontrados.");
+  // 1. Verificações de segurança e Dependências
+  if (!window.gsap || !window.ScrollTrigger) {
+    console.warn("GSAP ou ScrollTrigger não encontrados no window.");
     return;
   }
 
   const { gsap, ScrollTrigger, SplitType } = window;
   gsap.registerPlugin(ScrollTrigger);
 
-  // ====================================================
-  // 0. LIMPEZA (Agressiva mas necessária para SPA)
-  // ====================================================
-  // Isso matava a animação do blog antes. Agora vamos recriá-la abaixo.
+  // 2. Limpeza (Crucial para quando o Swup troca de página)
+  // Mata triggers antigos para não duplicar animações
   ScrollTrigger.getAll().forEach((t) => t.kill());
   gsap.killTweensOf("*");
 
-  // ====================================================
-  // 1. SETUP DE TEXTO (SplitType)
-  // ====================================================
-  if (SplitType?.revert) {
-    SplitType.revert(".split-animate");
-  }
-  new SplitType(".split-animate", { types: "chars, words" });
-
-  // ====================================================
-  // 2. HERO: ANIMAÇÃO IMEDIATA
-  // ====================================================
-  const heroTitle = document.querySelector(".hero-title.split-animate");
-  if (heroTitle) {
-    const heroChars = heroTitle.querySelectorAll(".char");
-    gsap.fromTo(heroChars, 
-      { opacity: 0, x: -20, filter: "blur(10px)" },
-      { opacity: 1, x: 0, filter: "blur(0px)", stagger: 0.08, duration: 1, ease: "power3.out", delay: 0.2 }
-    );
+  // 3. Configuração de Texto (SplitType)
+  if (window.SplitType) {
+    // Reverte splits anteriores se existirem para evitar quebra de layout
+    document.querySelectorAll(".split-animate").forEach(el => {
+      if(el.isSplit) el.revert();
+    });
+    // Cria novos splits
+    new SplitType(".split-animate", { types: "lines, words, chars" });
   }
 
-  // ====================================================
-  // 3. OUTROS TÍTULOS (Scroll)
-  // ====================================================
-  const allOtherTitles = gsap.utils.toArray(".split-animate:not(.hero-title)");
-  const nonPinnedTitles = allOtherTitles.filter((el) => !el.closest(".project-section"));
-
-  nonPinnedTitles.forEach((title) => {
-    const chars = title.querySelectorAll(".char");
-    if (!chars.length) return;
-
-    gsap.fromTo(chars, 
-      { opacity: 0, x: -20, filter: "blur(10px)" },
-      {
-        opacity: 1, x: 0, filter: "blur(0px)", stagger: 0.05, duration: 0.8, ease: "power2.out",
-        scrollTrigger: {
-          trigger: title,
-          start: "top 85%",
-          toggleActions: "play none none reverse"
-        }
-      }
-    );
-  });
-
-  // ====================================================
-  // 4. EMPREENDIMENTOS (Pin + Scroll)
-  // ====================================================
+  // ============================================================
+  // 4. ANIMAÇÃO DA VITRINE (A CORREÇÃO DO BLUR)
+  // ============================================================
   const sections = document.querySelectorAll(".project-section");
-  
-  const bgs = document.querySelectorAll(".bg-item");
-  const PIN_DISTANCE = 4500;
-  const GAP_BETWEEN_SECTIONS = 1500;
 
   sections.forEach((section, index) => {
-    const bg = bgs[index];
-    const content = section.querySelector(".project-content");
-    const miniNav = section.querySelector(".mini-nav");
-    const logoLayer = section.querySelector(".project-card-media--logo");
+    // Seletores dos elementos dentro da seção
+    const bgMedia = section.querySelector(".project-bg-media"); // A tag <img> ou <video>
+    const logoContainer = section.querySelector(".project-card-media--logo");
+    const textContent = section.querySelectorAll(".eyebrow, .split-animate, .lead, .project-actions");
     
-    // Título dentro da seção (se houver)
-    const sectionTitle = section.querySelector(".split-animate"); 
-    const titleChars = sectionTitle ? sectionTitle.querySelectorAll(".char") : null;
-
-    if (!bg || !content) return;
-
-    const contentGroup = [content, miniNav].filter(Boolean);
-
-    // Estado Inicial
-    gsap.set(bg, { opacity: 0 });
-    gsap.set(contentGroup, { autoAlpha: 0, y: 100 });
-    if (titleChars && titleChars.length) {
-      gsap.set(titleChars, { opacity: 0, x: -20, filter: "blur(10px)" });
+    // --- A. ESTADO INICIAL (RESET / SETUP) ---
+    // Define como tudo deve estar ANTES de começar a rolar.
+    
+    // 1. Fundo (Imagem/Video): 
+    // CORREÇÃO: Começa VISÍVEL (autoAlpha: 1), mas com BLUR e ZOOM.
+    // Assim não fica um fundo preto esperando carregar.
+    if (bgMedia) {
+      gsap.set(bgMedia, { 
+        filter: "blur(15px)", // Começa bem borrado (foco na logo)
+        scale: 1.1,           // Leve zoom in
+        autoAlpha: 1,         // GARANTE VISIBILIDADE
+        transformOrigin: "center center"
+      });
     }
-    if (logoLayer) gsap.set(logoLayer, { autoAlpha: 1 });
 
+    // 2. Logo: Começa visível no centro
+    if (logoContainer) {
+      gsap.set(logoContainer, { 
+        autoAlpha: 1, 
+        scale: 1,
+        y: 0 
+      });
+    }
+
+    // 3. Textos: Começam invisíveis e deslocados para baixo
+    if (textContent.length > 0) {
+      gsap.set(textContent, { 
+        autoAlpha: 0, 
+        y: 30 
+      });
+    }
+
+
+    // --- B. A TIMELINE (A Mágica do Scroll) ---
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: section,
-        start: "top top",
-        end: `+=${PIN_DISTANCE + GAP_BETWEEN_SECTIONS}`,
-        pin: true,
-        scrub: 0.5,
-        invalidateOnRefresh: true,
-        // Lógica da Logo
-        onEnter: () => logoLayer && gsap.to(logoLayer, { autoAlpha: 0, duration: 1, delay: 1.5, overwrite: true }),
-        onLeaveBack: () => logoLayer && gsap.to(logoLayer, { autoAlpha: 1, duration: 0.5, overwrite: true })
+        start: "top top", // Começa quando o topo da seção bate no topo da tela
+        end: "+=150%",    // Duração da animação (1.5x a altura da tela)
+        pin: true,        // Fixa a seção enquanto anima
+        scrub: 1,         // Animação atrelada ao scroll (suave)
+        id: `vitrine-section-${index}`
       }
     });
 
-    // Timeline steps
-    tl.to(bg, { opacity: 1, duration: 0.7, ease: "none" })
-      .to({}, { duration: 0.5 }) // Wait
-      .to(contentGroup, { autoAlpha: 1, y: 0, duration: 0.5, ease: "power2.out" });
-
-    // Se tiver título dentro da seção, anima ele na timeline
-    if (titleChars && titleChars.length) {
-      tl.to(titleChars, { opacity: 1, x: 0, filter: "blur(0px)", duration: 0.6, stagger: 0.06 }, "<0.1");
+    // PASSO 1: Transição Logo -> Fundo
+    if (logoContainer && bgMedia) {
+      tl
+        // 1a. Logo desaparece (sobe e encolhe)
+        .to(logoContainer, { 
+          autoAlpha: 0, 
+          scale: 0.8, 
+          y: -50,
+          duration: 2, 
+          ease: "power2.inOut" 
+        })
+        // 1b. SIMULTANEAMENTE ("<"), o fundo perde o blur e foca
+        // O "<" garante que não haja buraco preto entre um e outro
+        .to(bgMedia, { 
+          filter: "blur(0px)", 
+          scale: 1, 
+          duration: 2, 
+          ease: "power2.out" 
+        }, "<"); 
     }
 
-    tl.to({}, { duration: 1.5 }) // Hold de leitura
-      .to(contentGroup, { autoAlpha: 0, y: -100, duration: 0.3, ease: "power2.in" });
-      
-    if (titleChars && titleChars.length) {
-      tl.to(titleChars, { opacity: 0, x: -10, duration: 0.3 }, "<");
+    // PASSO 2: O Texto Entra
+    // Começa um pouco antes do passo 1 terminar (-=0.5) para ficar fluido
+    if (textContent.length > 0) {
+      tl.to(textContent, {
+        autoAlpha: 1,
+        y: 0,
+        stagger: 0.1, // Um elemento após o outro
+        duration: 1.5,
+        ease: "back.out(1.2)"
+      }, "-=0.5");
     }
 
-    tl.to(bg, { opacity: 0, duration: 0.5, ease: "none" })
-      .to({}, { duration: GAP_BETWEEN_SECTIONS / 1000 }); // Gap final
+    // PASSO 3: Pausa final
+    // Mantém a tela estática um pouco para o usuário ler antes de soltar o pin
+    tl.to({}, { duration: 1 }); 
   });
 
-  // ====================================================
-  // 5. BLOG CARDS (A CORREÇÃO!)
-  // ====================================================
-  // Movemos a animação para cá para que ela não seja "morta" pela limpeza do início
+  // ============================================================
+  // 5. ANIMAÇÃO DO BLOG (Fade Up)
+  // ============================================================
   const blogCards = document.querySelectorAll(".reveal-card");
-  const blogGrid = document.querySelector("#homeBlogGrid");
+  
+  if (blogCards.length > 0) {
+    // Estado inicial: invisível e descido
+    gsap.set(blogCards, { y: 50, opacity: 0 });
 
-  if (blogCards.length > 0 && blogGrid) {
-    // 1. Define estado inicial invisível (garante que não pisque)
-    gsap.set(blogCards, { y: 60, opacity: 0, filter: "blur(5px)" });
-
-    // 2. Anima a entrada (Batch ou Stagger simples)
     ScrollTrigger.batch(blogCards, {
-      start: "top 85%", // Começa quando o topo do card chega em 85% da tela
+      start: "top 85%", // Começa quando o topo do card entra na parte inferior da tela
       onEnter: batch => gsap.to(batch, {
-        opacity: 1,
-        y: 0,
-        filter: "blur(0px)",
-        stagger: 0.15,
-        duration: 0.8,
+        opacity: 1, 
+        y: 0, 
+        stagger: 0.15, 
+        duration: 0.8, 
         ease: "power2.out",
         overwrite: true
-      }),
-      // Opcional: Se quiser que eles sumam ao subir a tela, descomente abaixo:
-      onLeaveBack: batch => gsap.to(batch, { opacity: 0, y: 60, overwrite: true }) 
+      })
     });
   }
-
-  // Refresh final para garantir que o ScrollTrigger recalculou as posições
-  ScrollTrigger.refresh();
 }

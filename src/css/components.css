@@ -544,6 +544,7 @@
   color: #fff;
   border: 1px solid rgba(255,255,255,0.2);
   backdrop-filter: blur(4px);
+  margin-top: 25px;
 }
 
 .btn--ghost:hover {
@@ -830,4 +831,94 @@
   fill: none;
   stroke: currentColor;
   stroke-width: 2;
+}
+
+/* =========================================
+   FIX DA VITRINE (FUNDOS E VÍDEOS)
+   ========================================= */
+
+/* 1. O Palco (A Seção Inteira) */
+.project-section {
+  position: relative;
+  height: 100vh;       /* Ocupa toda a altura da tela */
+  width: 100%;
+  overflow: hidden;    /* Nada sai para fora */
+  display: flex;
+  align-items: center; /* Centraliza o conteúdo verticalmente */
+  background-color: #050505; /* Fundo preto de segurança */
+}
+
+/* 2. O Container do Fundo (Atrás de tudo) */
+.bg-item {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;          /* Camada 1 (Fundo) */
+  pointer-events: none; /* Não interfere no clique */
+}
+
+/* 3. A Imagem ou Vídeo (O Mídia) */
+.project-bg-media {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;   /* Estica a imagem para cobrir sem distorcer */
+  position: absolute;
+  top: 0;
+  left: 0;
+  
+  /* IMPORTANTE: Garante que começa visível */
+  opacity: 1;          
+  visibility: visible;
+}
+
+/* 4. A Camada de Escurecimento (Overlay) */
+.bg-item .overlay {
+  position: absolute;
+  inset: 0; /* Atalho para top:0, left:0, right:0, bottom:0 */
+  background: rgba(0, 0, 0, 0.4); /* Escurece 40% para o texto aparecer */
+  z-index: 2; /* Fica acima da imagem, mas abaixo do texto */
+}
+
+/* 5. O Conteúdo (Texto, Logo, Botão) */
+.project-content {
+  position: relative;
+  z-index: 10; /* Camada 10 (Frente) */
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  pointer-events: none; /* Deixa o clique passar para o scroll */
+}
+
+/* 6. A Logo do Card (Centralizada inicialmente) */
+.project-card-media--logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 2rem;
+  /* O JS vai controlar a opacidade, mas começamos visível */
+  opacity: 1; 
+}
+
+/* 7. Reativa cliques nos botões e links */
+.project-content a, 
+.project-content button,
+.project-actions {
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+/* 8. Mini Navegação Lateral (Bolinhas) */
+.mini-nav {
+  position: absolute;
+  right: 30px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
