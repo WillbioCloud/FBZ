@@ -42,19 +42,18 @@
       /* SEÇÃO HORIZONTAL */
       .horizontal-section {
         width: 100%;
-        height: 100vh;
-        overflow: hidden;
+        min-height: 100vh;
+        overflow: visible;
         position: relative;
         background: #050505;
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
+        display: block;
+        padding: 60px 0 120px;
       }
 
       .svg-layer, .horizontal-wrapper, .dots-layer {
         position: absolute;
-        transform: scale(0.94);
-        top: 0; left: 0; height: 100%;
+        top: 0; left: 0;
+        width: 100%;
         transform-origin: center center;
         will-change: transform;
       }
@@ -62,9 +61,9 @@
       .dots-layer { pointer-events: none; z-index: 2; }
       .horizontal-wrapper { z-index: 5; }
 
-      #zigzag-path { fill: none; stroke: rgba(255, 255, 255, 0.1); stroke-width: 4px; }
+      #zigzag-path { fill: none; stroke: rgba(255, 255, 255, 0.14); stroke-width: 4px; }
       #zigzag-tracer {
-        fill: none; stroke: var(--accent); stroke-width: 8px;
+        fill: none; stroke: var(--accent); stroke-width: 7px;
         stroke-linecap: round; filter: drop-shadow(0 0 15px var(--accent));
       }
 
@@ -92,9 +91,10 @@
       .h-card {
         position: absolute;
         width: 520px;
-        height: 280px;
+        min-height: 280px;
         background: rgba(10, 10, 10, 0.95);
-        border: 1px solid rgba(255, 255, 255, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-left: 3px solid var(--accent);
         backdrop-filter: blur(20px);
         display: flex;
         overflow: visible;
@@ -106,7 +106,7 @@
       .h-card:hover {
         border-color: var(--accent);
         z-index: 100 !important;
-        transform: scale(1.1) !important;
+        transform: translateY(-8px) scale(1.03) !important;
         filter: none !important;
         opacity: 1 !important;
       }
@@ -153,6 +153,11 @@
         opacity: 0;
       }
 
+      .h-card-story {
+        margin-top: 10px;
+        padding-top: 10px;
+        border-top: 1px solid rgba(255, 255, 255, 0.12);
+      }
       .h-title {
         font-size: 1.4rem;
         font-family: 'Montserrat', sans-serif;
@@ -180,6 +185,47 @@
         text-transform: uppercase;
         letter-spacing: 1px;
         opacity: 0.8;
+      }
+
+
+      .history-intro {
+        padding: 100px 0 60px;
+        background: linear-gradient(180deg, #050505 0%, rgba(5, 5, 5, 0.96) 100%);
+      }
+      .history-intro__grid {
+        display: grid;
+        grid-template-columns: 1.4fr 1fr;
+        gap: 30px;
+        align-items: start;
+      }
+      .history-intro__title {
+        margin-bottom: 14px;
+        font-size: clamp(2rem, 5vw, 3.3rem);
+        font-family: 'Montserrat', sans-serif;
+      }
+      .history-intro__copy {
+        max-width: 60ch;
+        color: #c9c9c9;
+      }
+      .history-pillars {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      .history-pill {
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        background: rgba(255, 255, 255, 0.05);
+        color: #fff;
+        padding: 8px 14px;
+        border-radius: 999px;
+        font-size: 0.75rem;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+      .history-pill--accent {
+        border-color: var(--accent);
+        color: var(--accent);
+        background: color-mix(in srgb, var(--accent) 12%, transparent);
       }
 
       /* MARCADORES (INÍCIO E FIM) */
@@ -298,6 +344,14 @@
         text-transform: uppercase;
         margin-top: 20px;
       }
+
+      @media (max-width: 980px) {
+        .history-intro__grid { grid-template-columns: 1fr; }
+        .h-card { width: calc(100% - 48px) !important; left: 24px !important; }
+        .h-card-img { width: 40%; }
+        .h-card-body { width: 60%; }
+      }
+
       @media (min-width: 768px) {
         .modal-content { flex-direction: row; height: 500px; }
         .modal-header { width: 50%; height: 100%; }
@@ -330,6 +384,26 @@
       </div>
     </header>
 
+    <section class="history-intro">
+      <div class="container history-intro__grid">
+        <div>
+          <p class="kicker" style="color: var(--accent);">Linha do Tempo FBZ</p>
+          <h2 class="history-intro__title">Da fundação aos grandes marcos urbanos.</h2>
+          <p class="history-intro__copy">
+            Acompanhe os capítulos que moldaram a FBZ Construtora: da fundação da empresa,
+            passando pelos loteamentos iniciais, pela expansão comercial com o Singapura Shopping,
+            até o lançamento do Reserva da Mata.
+          </p>
+        </div>
+        <div class="history-pillars" aria-label="Marcos em destaque">
+          <span class="history-pill history-pill--accent">Fundação</span>
+          <span class="history-pill">Loteamentos Iniciais</span>
+          <span class="history-pill">Singapura Shopping</span>
+          <span class="history-pill history-pill--accent">Reserva da Mata</span>
+        </div>
+      </div>
+    </section>
+
     <section class="horizontal-section">
       <div class="svg-layer">
         <svg style="width: 100%; height: 100%; overflow: visible;">
@@ -351,7 +425,7 @@
             class="start-text"
             style="font-size: 1rem; margin-top: 10px; max-width: 250px; line-height: 1.4; color: #ccc; text-transform: none;"
           >
-            Construção da primeira casa.
+            Fundação da FBZ e início da jornada com foco residencial.
           </div>
         </div>
 
@@ -361,7 +435,7 @@
               <rect x="6" y="6" width="12" height="12"></rect>
             </svg>
           </div>
-          <div class="future-text">Hoje</div>
+          <div class="future-text">Reserva da Mata</div>
 
           <div class="future-hidden-msg">
             <h3 style="color: var(--accent); margin-bottom: 8px;">O Futuro em Desenvolvimento</h3>
@@ -432,9 +506,11 @@
               <div class="h-card-body">
                 <span class="h-badge">${emp.status || "Início"}</span>
                 <h3 class="h-title">${emp.nome}</h3>
-                <p class="h-desc">${emp.descCurta}</p>
                 <h4 class="h-ano">${emp.ano}</h4>
-                <span class="click-hint">+ Clique para expandir</span>
+                <div class="h-card-story">
+                  <p class="h-desc">${emp.descCurta}</p>
+                  <span class="click-hint">+ Clique para expandir</span>
+                </div>
               </div>
             </article>
           `;

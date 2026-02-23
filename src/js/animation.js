@@ -33,7 +33,7 @@ export function initHomeAnimations() {
     const heroChars = heroTitle.querySelectorAll(".char");
     gsap.fromTo(heroChars, 
       { opacity: 0, x: -20, filter: "blur(10px)" },
-      { opacity: 1, x: 0, filter: "blur(0px)", stagger: 0.08, duration: 1, ease: "power3.out", delay: 0.2 }
+      { opacity: 1, x: 0, filter: "blur(0px)", stagger: 0.04, duration: 0.6, ease: "power3.out", delay: 0.1 }
     );
   }
 
@@ -50,7 +50,7 @@ export function initHomeAnimations() {
     gsap.fromTo(chars, 
       { opacity: 0, x: -20, filter: "blur(10px)" },
       {
-        opacity: 1, x: 0, filter: "blur(0px)", stagger: 0.05, duration: 0.8, ease: "power2.out",
+        opacity: 1, x: 0, filter: "blur(0px)", stagger: 0.035, duration: 0.55, ease: "power3.out",
         scrollTrigger: {
           trigger: title,
           start: "top 85%",
@@ -66,8 +66,8 @@ export function initHomeAnimations() {
   const sections = document.querySelectorAll(".project-section");
   
   const bgs = document.querySelectorAll(".bg-item");
-  const PIN_DISTANCE = 4500;
-  const GAP_BETWEEN_SECTIONS = 1500;
+  const PIN_DISTANCE = 3200;
+  const GAP_BETWEEN_SECTIONS = 900;
 
   sections.forEach((section, index) => {
     const bg = bgs[index];
@@ -97,32 +97,32 @@ export function initHomeAnimations() {
         start: "top top",
         end: `+=${PIN_DISTANCE + GAP_BETWEEN_SECTIONS}`,
         pin: true,
-        scrub: 0.5,
+        scrub: 0.3,
         invalidateOnRefresh: true,
         // Lógica da Logo
-        onEnter: () => logoLayer && gsap.to(logoLayer, { autoAlpha: 0, duration: 1, delay: 1.5, overwrite: true }),
-        onLeaveBack: () => logoLayer && gsap.to(logoLayer, { autoAlpha: 1, duration: 0.5, overwrite: true })
+        onEnter: () => logoLayer && gsap.to(logoLayer, { autoAlpha: 0, duration: 0.45, delay: 0.4, ease: "power2.out", overwrite: true }),
+        onLeaveBack: () => logoLayer && gsap.to(logoLayer, { autoAlpha: 1, duration: 0.35, ease: "power2.out", overwrite: true })
       }
     });
 
     // Timeline steps
-    tl.to(bg, { opacity: 1, duration: 0.7, ease: "none" })
-      .to({}, { duration: 0.5 }) // Wait
-      .to(contentGroup, { autoAlpha: 1, y: 0, duration: 0.5, ease: "power2.out" });
+    tl.to(bg, { opacity: 1, duration: 0.45, ease: "power2.out" })
+      .to({}, { duration: 0.2 }) // Wait
+      .to(contentGroup, { autoAlpha: 1, y: 0, duration: 0.45, ease: "power3.out" });
 
     // Se tiver título dentro da seção, anima ele na timeline
     if (titleChars && titleChars.length) {
-      tl.to(titleChars, { opacity: 1, x: 0, filter: "blur(0px)", duration: 0.6, stagger: 0.06 }, "<0.1");
+      tl.to(titleChars, { opacity: 1, x: 0, filter: "blur(0px)", duration: 0.45, stagger: 0.03, ease: "power3.out" }, "<0.05");
     }
 
-    tl.to({}, { duration: 1.5 }) // Hold de leitura
-      .to(contentGroup, { autoAlpha: 0, y: -100, duration: 0.3, ease: "power2.in" });
+    tl.to({}, { duration: 0.7 }) // Hold de leitura
+      .to(contentGroup, { autoAlpha: 0, y: -80, duration: 0.25, ease: "power2.in" });
       
     if (titleChars && titleChars.length) {
-      tl.to(titleChars, { opacity: 0, x: -10, duration: 0.3 }, "<");
+      tl.to(titleChars, { opacity: 0, x: -10, duration: 0.2, ease: "power2.in" }, "<");
     }
 
-    tl.to(bg, { opacity: 0, duration: 0.5, ease: "none" })
+    tl.to(bg, { opacity: 0, duration: 0.35, ease: "power2.in" })
       .to({}, { duration: GAP_BETWEEN_SECTIONS / 1000 }); // Gap final
   });
 
@@ -144,13 +144,13 @@ export function initHomeAnimations() {
         opacity: 1,
         y: 0,
         filter: "blur(0px)",
-        stagger: 0.15,
-        duration: 0.8,
+        stagger: 0.1,
+        duration: 0.55,
         ease: "power2.out",
         overwrite: true
       }),
       // Opcional: Se quiser que eles sumam ao subir a tela, descomente abaixo:
-      onLeaveBack: batch => gsap.to(batch, { opacity: 0, y: 60, overwrite: true }) 
+      onLeaveBack: batch => gsap.to(batch, { opacity: 0, y: 40, duration: 0.25, ease: "power2.in", overwrite: true }) 
     });
   }
 
