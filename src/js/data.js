@@ -70,10 +70,14 @@ export const FBZ_DATA = {
       status: "Entregue",
       slogan: "Invista no polo de conhecimento.",
       descCurta: "Localização estratégica ao lado das faculdades.",
-      heroImg: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80",
+      heroImg: "https://res.cloudinary.com/dxplpg36m/image/upload/v1770049574/0ac917_e2ea951dc0c14869b1a5af8ab0e7ac44_mv2_gvbjgo.avif",
       logo: "/assets/img/logo/LOGO-CIDADE-UNIVERSITARIA.webp",
       corHex: "#4338ca",
       link: "/src/empreendimentos/cidade-universitaria.html",
+      gallery: [
+        "https://res.cloudinary.com/dxplpg36m/image/upload/v1770049574/0ac917_e2ea951dc0c14869b1a5af8ab0e7ac44_mv2_gvbjgo.avif",
+        "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80",
+      ]
     },
 
     {
@@ -118,8 +122,8 @@ export const FBZ_DATA = {
         status: "Entregue",
         slogan: "Vida em harmonia com a natureza.",
         descCurta: "Loteamento com áreas verdes e infraestrutura moderna.",
-        heroImg: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80",
-        logo: "/assets/img/logo/LOGO-RESIDENCIAL-PRIMAVER-2.webp",
+        heroImg: "https://res.cloudinary.com/dxplpg36m/image/upload/v1770049575/0ac917_561d54c05e3446b6971015431ab0189f_mv2_kkgtdp.avif",
+        logo: "/assets/img/logo/LOGO-PRIMAVERA-2.webp",
         corHex: "#16a34a",
         link: "/src/empreendimentos/residencial-primaver-2.html",
     },

@@ -4,13 +4,14 @@ import { BrowserRouter, Routes, Route, Link, useLocation, useParams, useNavigate
 import { motion, AnimatePresence, useScroll, useTransform, useMotionValue } from 'framer-motion';
 import { Disclosure, Transition, Menu } from '@headlessui/react';
 import { useForm } from 'react-hook-form';
+import './index.css';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { 
   Phone, MapPin, Menu as MenuIcon, X, ChevronDown, CheckCircle, 
   ArrowRight, Instagram, Facebook, Mail, Building, Leaf, ShieldCheck, 
   Zap, Lightbulb, GraduationCap, Home, HardHat, Briefcase, Calendar, User,
-  Camera, Wifi, Lock, Map
+  Camera, Wifi, Lock, Map, Search, SlidersHorizontal
 } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -119,6 +120,60 @@ const PROJECTS = [
     seo: { title: 'Cidade Universitária | Lotes perto de faculdade em Caldas Novas', desc: 'Invista em lotes próximos às faculdades.' }
   },
   {
+    slug: 'singapura-shopping',
+    name: 'Singapura Shopping',
+    status: 'Entregue',
+    slogan: 'O novo polo comercial de Caldas Novas.',
+    theme: 'rose',
+    heroImage: 'https://res.cloudinary.com/dxplpg36m/image/upload/v1769899043/SnapVideo.app_473664765_17924665778995602_5744156763880720995_n_klwy8p.jpg',
+    description: 'Mix estratégico de lojas, conveniência e fluxo diário de visitantes.',
+    fullDescription: 'O Singapura Shopping marca a diversificação da FBZ para o segmento comercial. Um ativo consolidado, com arquitetura contemporânea, estacionamento amplo e operação preparada para marcas âncora, serviços e alimentação.',
+    price: 'Operação Entregue / Oportunidades de Expansão Comercial',
+    whyInvest: [
+      { title: 'Fluxo Qualificado', desc: 'Localização com alta circulação de moradores e turistas.' },
+      { title: 'Ticket Comercial Forte', desc: 'Ambiente ideal para varejo, serviços e gastronomia.' },
+      { title: 'Marca Consolidada', desc: 'Empreendimento entregue com reputação e operação ativa.' },
+      { title: 'Ativo Patrimonial', desc: 'Posicionamento premium com potencial de renda recorrente.' }
+    ],
+    diferenciais: ['Projeto Comercial Premium', 'Mix de Lojas', 'Praça de Alimentação', 'Estacionamento Amplo'],
+    infraestrutura: [
+      { name: 'Centro Comercial', icon: Building },
+      { name: 'Energia Estável', icon: Zap },
+      { name: 'Segurança Integrada', icon: ShieldCheck },
+      { name: 'Conectividade Wi-Fi', icon: Wifi }
+    ],
+    locationHighlights: [
+      'Região central de Caldas Novas',
+      'Acesso facilitado por avenidas principais',
+      'Entorno com hotéis e residencial consolidado',
+      'Alta visibilidade para marcas'
+    ],
+    gallery: [
+      'https://res.cloudinary.com/dxplpg36m/image/upload/v1769899043/SnapVideo.app_473664765_17924665778995602_5744156763880720995_n_klwy8p.jpg',
+      'https://res.cloudinary.com/dxplpg36m/image/upload/v1769899043/SnapVideo.app_476741791_17928075518995602_5834963185887579820_n_nzxqqw.jpg',
+      'https://res.cloudinary.com/dxplpg36m/image/upload/v1769899966/476389691_17927298083995602_4171301912659036465_n_mfogcx.jpg'
+    ],
+    constructionStatus: {
+      percentage: 100,
+      stage: 'Empreendimento entregue',
+      details: 'Shopping em operação com estrutura concluída e pronta para expansão comercial.'
+    },
+    testimonials: [
+      { name: 'Marina Prado', role: 'Lojista', text: 'O fluxo do Singapura superou nossa projeção inicial já no primeiro trimestre.' },
+      { name: 'João Henrique', role: 'Empresário', text: 'A FBZ entregou padrão, localização e segurança operacional para crescer com consistência.' }
+    ],
+    faq: [
+      { q: 'O shopping já está em funcionamento?', a: 'Sim. O Singapura Shopping está entregue e operando normalmente.' },
+      { q: 'Existem oportunidades para novos lojistas?', a: 'Sim, há oportunidades comerciais e planos para novos operadores.' },
+      { q: 'A FBZ segue responsável pelo ativo?', a: 'A FBZ mantém o compromisso com gestão estratégica e expansão do complexo comercial.' }
+    ],
+    whatsappMessage: 'Olá! Quero saber mais sobre oportunidades comerciais no Singapura Shopping.',
+    seo: {
+      title: 'Singapura Shopping | Empreendimento Comercial FBZ em Caldas Novas',
+      desc: 'Conheça o Singapura Shopping: ativo comercial entregue, moderno e estratégico em Caldas Novas.'
+    }
+  },
+  {
     slug: 'cidade-das-flores',
     name: 'Cidade das Flores',
     status: 'Últimas Unidades',
@@ -186,6 +241,57 @@ const PROJECTS = [
     faq: [{ q: 'Como garanto o preço de lançamento?', a: 'Faça o pré-cadastro nesta página agora.' }],
     whatsappMessage: 'Estou+no+Singapura+Shopping+e+gostaria+de+saber+mais+informa%C3%A7%C3%B5es+sobre+o+Reserva+da+Mata',
     seo: { title: 'Lançamento Reserva da Mata | Caldas Novas', desc: 'Pré-lançamento de lotes em Caldas Novas.' }
+  }
+];
+
+const HISTORY_MILESTONES = [
+  {
+    year: 2007,
+    title: 'Fundação da FBZ',
+    badge: 'Origem',
+    description: 'Em 7 de janeiro, Fabrizio Silva inicia a FBZ com foco em obras residenciais e um compromisso inegociável com qualidade técnica e confiança.',
+    image: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=1200',
+    highlight: 'Primeira casa entregue com assinatura de excelência.'
+  },
+  {
+    year: 2012,
+    title: 'Primeiro grande loteamento',
+    badge: 'Expansão',
+    description: 'Com o Setor Santa Clara, a FBZ dá o salto para o urbanismo em escala, estruturando processos, equipe e governança para crescer com consistência.',
+    image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=1200',
+    highlight: 'Transição da construção pontual para desenvolvimento urbano.'
+  },
+  {
+    year: 2016,
+    title: 'Lago Sul e consolidação de marca',
+    badge: 'Autoridade',
+    description: 'Empreendimentos com forte apelo de lazer e localização fortaleceram a reputação da FBZ no mercado de Caldas Novas.',
+    image: 'https://images.unsplash.com/photo-1600596542815-27bfefd544c8?q=80&w=1200',
+    highlight: 'Velocidade de vendas e credibilidade regional em alta.'
+  },
+  {
+    year: 2021,
+    title: 'Era dos bairros planejados',
+    badge: 'Inovação',
+    description: 'Cidade Verde e Cidade das Flores reforçam o compromisso com sustentabilidade, qualidade de vida e urbanismo inteligente.',
+    image: 'https://res.cloudinary.com/dxplpg36m/image/upload/v1769993855/WhatsApp_Image_2026-02-01_at_19.24.12_svdhyy.jpg',
+    highlight: 'Projetos com infraestrutura completa e visão de longo prazo.'
+  },
+  {
+    year: 2023,
+    title: 'Singapura Shopping',
+    badge: 'Diversificação',
+    description: 'A entrada no segmento comercial amplia o ecossistema da companhia, gerando novas oportunidades para a cidade e para investidores.',
+    image: 'https://res.cloudinary.com/dxplpg36m/image/upload/v1769899043/SnapVideo.app_473664765_17924665778995602_5744156763880720995_n_klwy8p.jpg',
+    highlight: 'Ativo entregue e operando como polo comercial.'
+  },
+  {
+    year: 2026,
+    title: 'Reserva da Mata',
+    badge: 'Futuro',
+    description: 'O capítulo mais recente une sofisticação, natureza e visão estratégica — símbolo da maturidade da FBZ no desenvolvimento urbano de alto padrão.',
+    image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=1200',
+    highlight: 'Luxo responsável com potencial de valorização expressivo.'
   }
 ];
 
@@ -329,7 +435,7 @@ const ParallaxImage = ({ src, alt, className = "", speed = 0.5 }: { src: string,
           trigger: containerRef.current,
           start: "top bottom",
           end: "bottom top",
-          scrub: true
+          scrub: 0.35
         }
       }
     );
@@ -353,8 +459,8 @@ const RevealText = ({ children, className = "", delay = 0 }: { children: React.R
       {
         y: 0,
         opacity: 1,
-        duration: 1,
-        ease: "power3.out",
+        duration: 0.5,
+        ease: "power2.out",
         delay: delay,
         scrollTrigger: {
           trigger: elRef.current,
@@ -416,6 +522,7 @@ const Layout = ({ children }: any) => {
                 { name: 'Home', path: '/' },
                 { name: 'Empreendimentos', path: '/empreendimentos' },
                 { name: 'Blog', path: '/blog' },
+                { name: 'Nossa História', path: '/nossa-historia' },
                 { name: 'Trabalhe Conosco', path: '/trabalhe-conosco' },
                 { name: 'Contato', path: '/contato' },
               ].map(link => (
@@ -453,6 +560,7 @@ const Layout = ({ children }: any) => {
                       <Menu.Item>{({ active }) => <Link to="/" className={`${active ? 'bg-primary text-white' : 'text-gray-900'} block px-4 py-2 text-sm`}>Home</Link>}</Menu.Item>
                       <Menu.Item>{({ active }) => <Link to="/empreendimentos" className={`${active ? 'bg-primary text-white' : 'text-gray-900'} block px-4 py-2 text-sm`}>Empreendimentos</Link>}</Menu.Item>
                       <Menu.Item>{({ active }) => <Link to="/blog" className={`${active ? 'bg-primary text-white' : 'text-gray-900'} block px-4 py-2 text-sm`}>Blog</Link>}</Menu.Item>
+                      <Menu.Item>{({ active }) => <Link to="/nossa-historia" className={`${active ? 'bg-primary text-white' : 'text-gray-900'} block px-4 py-2 text-sm`}>Nossa História</Link>}</Menu.Item>
                       <Menu.Item>{({ active }) => <Link to="/trabalhe-conosco" className={`${active ? 'bg-primary text-white' : 'text-gray-900'} block px-4 py-2 text-sm`}>Trabalhe Conosco</Link>}</Menu.Item>
                       <Menu.Item>{({ active }) => <Link to="/contato" className={`${active ? 'bg-primary text-white' : 'text-gray-900'} block px-4 py-2 text-sm`}>Contato</Link>}</Menu.Item>
                     </div>
@@ -476,9 +584,13 @@ const Layout = ({ children }: any) => {
           <div className="grid md:grid-cols-4 gap-12 mb-12">
             <div>
               <div className="font-serif font-bold text-2xl mb-4">FBZ</div>
-              <p className="text-gray-400 text-sm">
+              <p className="text-gray-400 text-sm mb-4">
                 Construindo sonhos em solo firme. Loteamentos de alto padrão em Caldas Novas, Goiás.
               </p>
+              <div className="space-y-2 text-sm">
+                <Link to="/nossa-historia" className="text-gray-300 hover:text-white transition-colors block">Nossa História</Link>
+                <Link to="/blog" className="text-gray-300 hover:text-white transition-colors block">Blog FBZ</Link>
+              </div>
             </div>
             <div>
               <h4 className="font-bold mb-4 text-accent">Empreendimentos</h4>
@@ -600,7 +712,7 @@ const HomePage = () => {
           <div className="absolute inset-0 bg-gradient-to-r from-primary-dark/95 via-primary-dark/50 to-primary-dark/30" />
         </div>
         <Container className="relative z-10 pt-20">
-          <motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, ease: "easeOut" }}>
+          <motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, ease: "easeOut" }}>
             <Badge type="success">Excelência em Urbanismo</Badge>
             <h1 className="text-5xl md:text-7xl font-serif font-bold text-white mt-6 mb-8 leading-tight drop-shadow-lg">
               Construa seu legado <br/> em <span className="text-accent">solo firme</span>.
@@ -689,8 +801,8 @@ const HomePage = () => {
             <h2 className="text-3xl font-serif font-bold text-gray-900">Últimas do Blog</h2>
           </RevealText>
           <div className="grid md:grid-cols-3 gap-8">
-            {BLOG_POSTS.map(post => (
-              <Link to="/blog" key={post.id} className="group cursor-pointer">
+            {BLOG_POSTS.slice(0, 3).map(post => (
+              <Link to="/blog" key={post.id} className="group cursor-pointer bg-white rounded-xl p-4 border border-stone-100 shadow-sm hover:shadow-lg transition-all block">
                 <div className="rounded-xl overflow-hidden mb-4 shadow-md group-hover:shadow-xl transition-all">
                   <img src={post.image} alt={post.title} className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500" />
                 </div>
@@ -740,7 +852,7 @@ const ProjectTemplate = () => {
         } to-transparent`} />
         
         <Container className="relative z-10 grid lg:grid-cols-2 gap-12 items-center pt-20">
-          <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }}>
+          <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.45 }}>
             <Badge type={project.isLaunch ? 'launch' : 'success'}>{project.status}</Badge>
             <h1 className="text-4xl md:text-6xl font-serif font-bold text-white mt-6 mb-6 leading-tight drop-shadow-md">
               {project.slogan}
@@ -761,7 +873,7 @@ const ProjectTemplate = () => {
           <motion.div 
             initial={{ opacity: 0, y: 30 }} 
             animate={{ opacity: 1, y: 0 }} 
-            transition={{ delay: 0.2, duration: 0.8 }}
+            transition={{ delay: 0.1, duration: 0.45 }}
             className="hidden lg:block bg-white/95 backdrop-blur-sm p-8 rounded-2xl shadow-2xl max-w-sm ml-auto border border-white/20"
           >
             <div className="text-center mb-6">
@@ -841,7 +953,7 @@ const ProjectTemplate = () => {
                        <motion.div 
                           initial={{ width: 0 }} 
                           whileInView={{ width: `${project.constructionStatus.percentage}%` }}
-                          transition={{ duration: 1.5, ease: "circOut" }}
+                          transition={{ duration: 0.7, ease: "circOut" }}
                           className={`h-full rounded-full ${project.theme === 'cyan' ? 'bg-cyan-500' : 'bg-primary'}`} 
                        />
                     </div>
@@ -1038,46 +1150,170 @@ const ProjectsList = () => (
   </div>
 );
 
-const BlogPage = () => (
-  <div className="bg-stone-50 min-h-screen pt-20">
-    <SeoManager title="Blog FBZ | Notícias e Dicas" description="Fique por dentro do mercado imobiliário." />
-    <Container className="py-20">
-      <RevealText className="text-center mb-16">
-        <h1 className="text-4xl font-serif font-bold text-primary-dark mb-4">Blog FBZ</h1>
-        <p className="text-gray-600 max-w-2xl mx-auto">Conteúdo exclusivo sobre investimentos, mercado imobiliário e Caldas Novas.</p>
-      </RevealText>
-      
-      <div className="grid md:grid-cols-3 gap-10">
-        {BLOG_POSTS.map((post, i) => (
-          <motion.article 
-            key={post.id} 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.1 }}
-            viewport={{ once: true }}
-            className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all flex flex-col h-full"
-          >
-            <div className="h-56 overflow-hidden">
-              <img src={post.image} alt={post.title} className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
+const BlogPage = () => {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [activeCategory, setActiveCategory] = useState('Todos');
+
+  const categories = ['Todos', 'Investimento', 'Mercado', 'Financiamento'];
+
+  const categorizedPosts = BLOG_POSTS.map((post, index) => ({
+    ...post,
+    category: index === 0 ? 'Investimento' : index === 1 ? 'Mercado' : 'Financiamento',
+    readTime: `${4 + index} min de leitura`
+  }));
+
+  const featuredPost = categorizedPosts[0];
+  const filteredPosts = categorizedPosts.filter((post) => {
+    const byCategory = activeCategory === 'Todos' || post.category === activeCategory;
+    const bySearch = `${post.title} ${post.excerpt}`.toLowerCase().includes(searchTerm.toLowerCase());
+    return byCategory && bySearch;
+  });
+
+  return (
+    <div className="bg-stone-50 min-h-screen pt-20">
+      <SeoManager title="Blog FBZ | Notícias e Dicas" description="Fique por dentro do mercado imobiliário." />
+
+      <section className="bg-primary-dark text-white py-16 md:py-20 relative overflow-hidden">
+        <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_top_right,_#d4a017,_transparent_40%)]" />
+        <Container className="relative z-10">
+          <RevealText>
+            <p className="text-accent uppercase tracking-[0.2em] text-xs font-bold mb-4">Editorial FBZ</p>
+            <h1 className="text-4xl md:text-5xl font-serif font-bold mb-4">Insights para investir com segurança</h1>
+            <p className="text-gray-300 max-w-3xl">Conteúdos curados sobre valorização imobiliária, tendências urbanas e decisões inteligentes para proteger e multiplicar patrimônio.</p>
+          </RevealText>
+        </Container>
+      </section>
+
+      <Container className="py-14">
+        <motion.article initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45 }} className="grid lg:grid-cols-2 gap-8 bg-white rounded-3xl border border-stone-100 shadow-premium overflow-hidden mb-12">
+          <div className="h-72 lg:h-full overflow-hidden">
+            <img src={featuredPost.image} alt={featuredPost.title} className="w-full h-full object-cover" />
+          </div>
+          <div className="p-8 lg:p-10 flex flex-col">
+            <Badge type="success">Hero Post</Badge>
+            <h2 className="text-3xl font-serif font-bold text-gray-900 mt-4 mb-3">{featuredPost.title}</h2>
+            <p className="text-gray-600 leading-relaxed mb-6">{featuredPost.excerpt}</p>
+            <div className="flex flex-wrap gap-3 text-xs uppercase tracking-wide text-gray-500 font-semibold mb-8">
+              <span>{featuredPost.date}</span><span>•</span><span>{featuredPost.author}</span><span>•</span><span>{featuredPost.readTime}</span>
             </div>
-            <div className="p-8 flex-1 flex flex-col">
-              <div className="flex items-center gap-4 text-xs text-gray-500 mb-4 font-semibold uppercase tracking-wider">
-                <span>{post.date}</span>
-                <span className="w-1 h-1 bg-gray-300 rounded-full" />
-                <span>{post.author}</span>
+            <Button variant="primary" className="w-fit">Ler matéria em destaque</Button>
+          </div>
+        </motion.article>
+
+        <div className="bg-white rounded-2xl border border-stone-100 p-5 md:p-6 mb-10">
+          <div className="flex flex-col lg:flex-row gap-4 lg:items-center lg:justify-between">
+            <div className="relative w-full lg:max-w-md">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+              <input value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} placeholder="Buscar por título ou assunto" className="w-full pl-10 pr-4 py-3 rounded-lg border border-stone-200 focus:ring-2 focus:ring-primary/30 outline-none" />
+            </div>
+            <div className="flex items-center gap-2 overflow-x-auto pb-1">
+              <SlidersHorizontal size={18} className="text-gray-500 mr-1" />
+              {categories.map((category) => (
+                <button key={category} onClick={() => setActiveCategory(category)} className={`px-4 py-2 rounded-full text-sm font-semibold whitespace-nowrap transition-colors ${activeCategory === category ? 'bg-primary text-white' : 'bg-stone-100 text-gray-700 hover:bg-stone-200'}`}>
+                  {category}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-8">
+          {filteredPosts.map((post, i) => (
+            <motion.article key={`${post.id}-${post.category}`} initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: i * 0.06 }} viewport={{ once: true }} className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all flex flex-col h-full border border-stone-100">
+              <div className="h-52 overflow-hidden">
+                <img src={post.image} alt={post.title} className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-3 font-serif hover:text-primary cursor-pointer transition-colors">{post.title}</h3>
-              <p className="text-gray-600 mb-6 leading-relaxed flex-1">{post.excerpt}</p>
-              <a href="#" className="text-primary font-bold text-sm uppercase tracking-wide flex items-center group">
-                Ler Matéria <ArrowRight size={16} className="ml-2 group-hover:translate-x-2 transition-transform" />
-              </a>
-            </div>
-          </motion.article>
-        ))}
-      </div>
-    </Container>
-  </div>
-);
+              <div className="p-6 flex-1 flex flex-col">
+                <span className="text-[11px] uppercase tracking-[0.16em] text-accent font-bold mb-3">{post.category}</span>
+                <h3 className="text-xl font-bold text-gray-900 mb-2 font-serif">{post.title}</h3>
+                <p className="text-gray-600 text-sm leading-relaxed mb-5 flex-1">{post.excerpt}</p>
+                <div className="flex justify-between items-center text-xs text-gray-500 font-medium">
+                  <span>{post.date}</span>
+                  <span>{post.readTime}</span>
+                </div>
+              </div>
+            </motion.article>
+          ))}
+        </div>
+      </Container>
+    </div>
+  );
+};
+
+const HistoryPage = () => {
+  return (
+    <div className="bg-stone-50 min-h-screen pt-20">
+      <SeoManager title="Nossa História | FBZ Construtora" description="Conheça os marcos da trajetória da FBZ, da fundação ao Reserva da Mata." />
+
+      <section className="bg-primary-dark text-white py-20 relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(212,160,23,0.18),_transparent_55%)]" />
+        <Container className="relative z-10">
+          <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45 }}>
+            <Badge type="success">Nossa História</Badge>
+            <h1 className="text-4xl md:text-6xl font-serif font-bold mt-6 mb-5">Uma trajetória construída com visão, entrega e confiança</h1>
+            <p className="text-gray-300 max-w-3xl text-lg leading-relaxed">Da primeira casa construída em 2007 à sofisticação do Reserva da Mata, cada etapa da FBZ reforça nossa autoridade em urbanismo, segurança jurídica e valorização imobiliária sustentável.</p>
+          </motion.div>
+        </Container>
+      </section>
+
+      <Container className="py-16">
+        <div className="relative pl-6 md:pl-10">
+          <div className="absolute left-2 md:left-4 top-0 bottom-0 w-[2px] bg-gradient-to-b from-accent via-primary to-transparent" />
+          <div className="space-y-10">
+            {HISTORY_MILESTONES.map((milestone, index) => (
+              <motion.article
+                key={milestone.year + milestone.title}
+                ref={(el) => {
+                  if (!el) return;
+                  gsap.fromTo(
+                    el,
+                    { autoAlpha: 0, y: 28, scale: 0.98 },
+                    {
+                      autoAlpha: 1,
+                      y: 0,
+                      scale: 1,
+                      duration: 0.45,
+                      ease: 'power2.out',
+                      scrollTrigger: {
+                        trigger: el,
+                        start: 'top 88%',
+                        toggleActions: 'play none none reverse',
+                      },
+                    }
+                  );
+                }}
+                className="relative grid lg:grid-cols-[180px_1fr] gap-6 bg-white border border-stone-100 rounded-2xl shadow-sm overflow-hidden"
+              >
+                <div className="absolute -left-[2px] top-10 w-4 h-4 rounded-full bg-accent border-4 border-white shadow" />
+                <div className="p-6 lg:p-8 bg-stone-100/70">
+                  <p className="text-4xl font-serif font-bold text-primary-dark">{milestone.year}</p>
+                  <span className="inline-flex mt-2 text-xs uppercase tracking-wider font-bold text-accent">{milestone.badge}</span>
+                </div>
+                <div className="grid md:grid-cols-2 gap-0">
+                  <div className="h-56 md:h-full overflow-hidden">
+                    <img src={milestone.image} alt={milestone.title} className="w-full h-full object-cover" />
+                  </div>
+                  <div className="p-6 lg:p-8">
+                    <h3 className="text-2xl font-serif font-bold text-gray-900 mb-3">{milestone.title}</h3>
+                    <p className="text-gray-600 leading-relaxed mb-4">{milestone.description}</p>
+                    <p className="text-sm font-semibold text-primary">{milestone.highlight}</p>
+                    {index === HISTORY_MILESTONES.length - 1 && (
+                      <div className="mt-6">
+                        <Link to="/empreendimentos/reserva-da-mata">
+                          <Button variant="accent">Conhecer o Reserva da Mata</Button>
+                        </Link>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </motion.article>
+            ))}
+          </div>
+        </div>
+      </Container>
+    </div>
+  );
+};
 
 const CareersPage = () => {
   return (
@@ -1253,6 +1489,7 @@ const App = () => {
           <Route path="/empreendimentos" element={<ProjectsList />} />
           <Route path="/empreendimentos/:slug" element={<ProjectTemplate />} />
           <Route path="/blog" element={<BlogPage />} />
+          <Route path="/nossa-historia" element={<HistoryPage />} />
           <Route path="/trabalhe-conosco" element={<CareersPage />} />
           <Route path="/contato" element={<ContactPage />} />
           <Route path="*" element={<div className="pt-32 text-center h-screen flex items-center justify-center text-xl font-serif text-gray-500">Página não encontrada</div>} />
