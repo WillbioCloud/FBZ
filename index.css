@@ -2,45 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Comportamento suave global */
-html {
-  scroll-behavior: smooth;
-}
-
 body {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  background-color: #f5f5f4; /* Cor de fundo padrão da FBZ (stone-50) */
+  background-color: #f5f5f4;
 }
 
-/* ==========================================
-   MANTIDO DO SEU BASE.CSS ANTIGO
-========================================== */
-
-/* Estilização da Scrollbar (Barra de rolagem) */
 ::-webkit-scrollbar {
   width: 10px;
 }
+
 ::-webkit-scrollbar-track {
-  background: #081726; /* primary-dark */
+  background: #0f2b46;
 }
+
 ::-webkit-scrollbar-thumb {
-  background: #d4a017; /* accent */
-  border-radius: 4px;
+  background: #d4a017;
+  border-radius: 9999px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
-  background: #e5b83b; /* accent-light */
-}
-
-/* Otimização para as animações do GSAP / SplitText */
-.char {
-  display: inline-block;
-  will-change: transform, opacity;
-}
-
-/* Performance: evita repaints gigantes em animações */
-.project-section,
-.hero,
-.nav {
-  transform: translateZ(0);
+  background: #b58a12;
 }
