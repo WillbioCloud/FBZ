@@ -13,6 +13,38 @@ document.addEventListener("DOMContentLoaded", () => {
   const homeBlogContainer = document.getElementById("homeBlogGrid");
   let bgContainer = document.getElementById("bg-container");
 
+  const renderHomeBlogCards = () => {
+    if (!homeBlogContainer || !Array.isArray(BLOG_DATA) || !BLOG_DATA.length) return;
+
+    const recentPosts = [...BLOG_DATA].slice(0, 3);
+    const iconEye = `<svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>`;
+    const iconMsg = `<svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>`;
+    const iconClock = `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>`;
+
+    homeBlogContainer.innerHTML = recentPosts.map(post => `
+      <a href="/src/blog-post.html?slug=${post.slug}" class="blog-card reveal-card" style="text-decoration:none; color:inherit;">
+        <img src="${post.thumb}" alt="${post.titulo}" class="blog-thumb" loading="lazy">
+        <div class="blog-body">
+          <div class="blog-meta">
+            <span>${post.categoria}</span>
+            <span>${post.data}</span>
+          </div>
+          <h3 class="blog-title">${post.titulo}</h3>
+          <p class="blog-excerpt">${post.resumo.substring(0, 100)}...</p>
+          <div class="blog-stats">
+            <span title="Visualizações">${iconEye} ${post.views || 0}</span>
+            <span title="Comentários">${iconMsg} ${post.comments || 0}</span>
+            <span title="Tempo">${iconClock} ${post.readTime || "3 min"}</span>
+          </div>
+          <div class="blog-footer">
+            <span style="font-size:0.8rem">Por ${post.autor}</span>
+            <span class="read-more">Ler mais <span>→</span></span>
+          </div>
+        </div>
+      </a>
+    `).join("");
+  };
+
   // --- FUNÇÃO DE SCROLL INTELIGENTE (A Mágica) ---
   // Rola para a seção e adiciona o offset para pular a animação de entrada
   const smoothScrollTo = (targetId) => {
@@ -225,35 +257,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // --- BLOG HOME (Mantido) ---
-  if (blogGrid && BLOG_DATA) {
-    const recentPosts = BLOG_DATA.slice(0, 3);
-    const iconEye = `<svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>`;
-    const iconMsg = `<svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>`;
-    const iconClock = `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>`;
-
-    homeBlogContainer.innerHTML = recentPosts.map(post => `
-      <a href="/src/blog-post.html?slug=${post.slug}" class="blog-card reveal-card" style="text-decoration:none; color:inherit;">
-        <img src="${post.thumb}" alt="${post.titulo}" class="blog-thumb" loading="lazy">
-        <div class="blog-body">
-          <div class="blog-meta">
-            <span>${post.categoria}</span>
-            <span>${post.data}</span>
-          </div>
-          <h3 class="blog-title" style="font-size: 1.1rem;">${post.titulo}</h3>
-          <p class="blog-excerpt" style="font-size: 0.9rem;">${post.resumo.substring(0, 100)}...</p>
-          <div class="blog-stats">
-            <span title="Visualizações">${iconEye} ${post.views || 0}</span>
-            <span title="Comentários">${iconMsg} ${post.comments || 0}</span>
-            <span title="Tempo">${iconClock} ${post.readTime || '3 min'}</span>
-          </div>
-          <div class="blog-footer">
-            <span style="font-size:0.8rem">Por ${post.autor}</span>
-            <span class="read-more">Ler mais <span>→</span></span>
-          </div>
-        </div>
-      </a>
-    `).join('');
-  }
+  renderHomeBlogCards();
 
   const pageSlug = document.body.getAttribute("data-empreendimento");
   if (pageSlug) {
