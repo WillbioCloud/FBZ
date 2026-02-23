@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { createRoot } from 'react-dom/client';
+import './index.css';
 import { BrowserRouter, Routes, Route, Link, useLocation, useParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence, useScroll, useTransform, useMotionValue } from 'framer-motion';
 import { Disclosure, Transition, Menu } from '@headlessui/react';
 import { useForm } from 'react-hook-form';
-import './index.css';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { 
